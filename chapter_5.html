@@ -506,95 +506,109 @@ fn main() {
         .add_systems(Startup, spammy::print_trash)
         .add_systems(Update, some_queries.run_if(run_once()))
         .run();
-}```
-
-Lets modify Tracing
+}
+</code></pre>
+<p>Lets modify Tracing</p>
+<pre><code>tracing_subscriber::fmt()
+  .without_time()
+  .with_file(true)
+  .with_line_number(true)
+  .pretty()
+  .with_env_filter(
+      EnvFilter::from_str(
+          "warn,test_spiral=debug,test_spiral::spammy=info,test_spiral[start]=trace",
+      )
+      .unwrap(),
+  )
+  .init();
 
 </code></pre>
-<p>tracing_subscriber::fmt()
-.without_time()
-.with_file(true)
-.with_line_number(true)
-.pretty()
-.with_env_filter(
-EnvFilter::from_str(
-"warn,test_spiral=debug,test_spiral::spammy=info,test_spiral[start]=trace",
-)
-.unwrap(),
-)
-.init();</p>
-<pre><code>I find time spammy with diff files
-I mentioned that `dbg!` had line numbers and file names.
-Pretty is useful for console remove if you are redirecting to a txt file
+<p>I find time spammy with diff files
+I mentioned that <code>dbg!</code> had line numbers and file names.
+Pretty is useful for console remove if you are redirecting to a txt file</p>
+<p>Now lets run</p>
+<pre><code>     Running `target/debug/test_spiral`
+   WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation
+    at /home/lyndonm/.cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-hal-0.21.1/src/vulkan/instance.rs:724
 
-Now lets run
+   WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
+        terminator_CreateInstance: Failed to CreateInstance in ICD 4.  Skipping ICD.
+    at /home/lyndonm/.cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-hal-0.21.1/src/vulkan/instance.rs:89
 
+   WARN wgpu_hal::vulkan::instance:     objects: (type: INSTANCE, hndl: 0x5fb6876377c0, name: ?)
+    at /home/lyndonm/.cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-hal-0.21.1/src/vulkan/instance.rs:148
 
+   WARN wgpu_hal::gles::egl: No config found!
+    at /home/lyndonm/.cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-hal-0.21.1/src/gles/egl.rs:269
+
+   WARN wgpu_hal::gles::egl: EGL says it can present to the window but not natively
+    at /home/lyndonm/.cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-hal-0.21.1/src/gles/egl.rs:258
+
+  DEBUG test_spiral::spammy: I am going to print trash
+    at src/main.rs:107
+    in test_spiral::spammy::start
+
+   INFO test_spiral: Hello Log
+    at src/main.rs:40
+    in test_spiral::start
+    in test_spiral::setup
+
+  TRACE test_spiral::spammy: i: 0
+    at src/main.rs:109
+    in test_spiral::spammy::start
+
+  DEBUG test_spiral: Don't hide me
+    at src/main.rs:41
+    in test_spiral::start
+    in test_spiral::setup
+
+  TRACE test_spiral::spammy: i: 1
+    at src/main.rs:109
+    in test_spiral::spammy::start
+
+  TRACE test_spiral::spammy: i: 2
+    at src/main.rs:109
+    in test_spiral::spammy::start
+
+  TRACE test_spiral::spammy: i: 3
+    at src/main.rs:109
+    in test_spiral::spammy::start
+
+   INFO test_spiral::spammy: Fizz
+    at src/main.rs:116
+    in test_spiral::spammy::some_function with i: 3
+    in test_spiral::spammy::start
+
+  TRACE test_spiral::spammy: i: 4
+    at src/main.rs:109
+    in test_spiral::spammy::start
+
+  TRACE test_spiral::spammy: i: 5
+    at src/main.rs:109
+    in test_spiral::spammy::start
+
+  TRACE test_spiral::spammy: i: 6
+    at src/main.rs:109
+    in test_spiral::spammy::start
+
+  TRACE test_spiral::spammy: i: 7
+    at src/main.rs:109
+    in test_spiral::spammy::start
+
+  TRACE test_spiral::spammy: i: 8
+    at src/main.rs:109
+    in test_spiral::spammy::start
+
+  TRACE test_spiral::spammy: i: 9
+    at src/main.rs:109
+    in test_spiral::spammy::start
+
+   INFO test_spiral: not actually going to run
+    at src/main.rs:96
+    in test_spiral::some_queries
 </code></pre>
-<pre><code> Running `target/debug/test_spiral`
-</code></pre>
-<p>WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation
-at /home/lyndonm/.cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-hal-0.21.1/src/vulkan/instance.rs:724</p>
-<p>WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
-terminator_CreateInstance: Failed to CreateInstance in ICD 4.  Skipping ICD.
-at /home/lyndonm/.cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-hal-0.21.1/src/vulkan/instance.rs:89</p>
-<p>WARN wgpu_hal::vulkan::instance:     objects: (type: INSTANCE, hndl: 0x5fb6876377c0, name: ?)
-at /home/lyndonm/.cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-hal-0.21.1/src/vulkan/instance.rs:148</p>
-<p>WARN wgpu_hal::gles::egl: No config found!
-at /home/lyndonm/.cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-hal-0.21.1/src/gles/egl.rs:269</p>
-<p>WARN wgpu_hal::gles::egl: EGL says it can present to the window but not natively
-at /home/lyndonm/.cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-hal-0.21.1/src/gles/egl.rs:258</p>
-<p>DEBUG test_spiral::spammy: I am going to print trash
-at src/main.rs:107
-in test_spiral::spammy::start</p>
-<p>INFO test_spiral: Hello Log
-at src/main.rs:40
-in test_spiral::start
-in test_spiral::setup</p>
-<p>TRACE test_spiral::spammy: i: 0
-at src/main.rs:109
-in test_spiral::spammy::start</p>
-<p>DEBUG test_spiral: Don't hide me
-at src/main.rs:41
-in test_spiral::start
-in test_spiral::setup</p>
-<p>TRACE test_spiral::spammy: i: 1
-at src/main.rs:109
-in test_spiral::spammy::start</p>
-<p>TRACE test_spiral::spammy: i: 2
-at src/main.rs:109
-in test_spiral::spammy::start</p>
-<p>TRACE test_spiral::spammy: i: 3
-at src/main.rs:109
-in test_spiral::spammy::start</p>
-<p>INFO test_spiral::spammy: Fizz
-at src/main.rs:116
-in test_spiral::spammy::some_function with i: 3
-in test_spiral::spammy::start</p>
-<p>TRACE test_spiral::spammy: i: 4
-at src/main.rs:109
-in test_spiral::spammy::start</p>
-<p>TRACE test_spiral::spammy: i: 5
-at src/main.rs:109
-in test_spiral::spammy::start</p>
-<p>TRACE test_spiral::spammy: i: 6
-at src/main.rs:109
-in test_spiral::spammy::start</p>
-<p>TRACE test_spiral::spammy: i: 7
-at src/main.rs:109
-in test_spiral::spammy::start</p>
-<p>TRACE test_spiral::spammy: i: 8
-at src/main.rs:109
-in test_spiral::spammy::start</p>
-<p>TRACE test_spiral::spammy: i: 9
-at src/main.rs:109
-in test_spiral::spammy::start</p>
-<p>INFO test_spiral: not actually going to run
-at src/main.rs:96
-in test_spiral::some_queries</p>
-<pre><code>Line numbers and file names. You may be happy to just work from this point.
-Next chapters is basically breaking Tracing up into layers
-</code></pre>
+<p>Line numbers and file names. You may be happy to just work from this point.
+Next chapters is basically breaking Tracing up into layers</p>
 
                     </main>
 
