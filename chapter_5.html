@@ -186,7 +186,7 @@
 <h2 id="next-steps-from-what-we-have-learnt"><a class="header" href="#next-steps-from-what-we-have-learnt">Next Steps from what we have learnt</a></h2>
 <p>So far we have learned about logging levels and filtering by module our next goal is to learn how to add more context to our logs.</p>
 <h3 id="instrument"><a class="header" href="#instrument">instrument</a></h3>
-<p>instrument adds more context to your functions</p>
+<p><code>instrument</code> adds more context to your functions</p>
 <pre><pre class="playground"><code class="language-rust edition2018">
 use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
@@ -280,7 +280,7 @@ mod spammy {
         }
     }
 }</code></pre></pre>
-<p>Of particular note is instrument</p>
+<p>Of particular note is <code>instrument</code></p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[instrument]
@@ -302,11 +302,11 @@ mod spammy {
 2024-10-19T22:42:48.169411Z DEBUG test_spiral: Don't hide me
 2024-10-19T22:42:48.169448Z  INFO some_function{i=3}: test_spiral::spammy: Fizz
 </code></pre>
-<p>Notice that some_function is now printing along with its argument some more context</p>
-<p>we can skip the arguments using skip_all which can be useful if some arguments don't have debug</p>
+<p>Notice that <code>some_function</code> is now printing along with its argument some more context.</p>
+<p>We can skip the arguments using skip_all which can be useful if some arguments don't have debug.</p>
 <p><code>#[instrument(skip_all)]</code></p>
-<p>I tend to use skip_all for all my systems as queries can be quite spammy
-If I am a system to query all transforms</p>
+<p>I tend to use skip_all for all my systems as queries can be quite spammy.
+If create a system to query all transforms</p>
 <p><code>.add_systems(Update, some_queries.run_if(run_once()))</code></p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -315,7 +315,7 @@ fn some_queries(transformers: Query&lt;&amp;Transform&gt;) {
     info!("not actually going to run");
 }
 <span class="boring">}</span></code></pre></pre>
-<p>The output gets quite verbose per query</p>
+<p>The output gets quite verbose per query.</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:49:03.036115Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
 2024-10-19T22:49:03.046122Z  WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
@@ -335,6 +335,19 @@ test_spiral: not actually going to run
 <p>Note I added the line breaks to fit the margins</p>
 <p>So lets add skip all
 <code>#[instrument(skip_all)]</code></p>
+<p>The output</p>
+<pre><code>     Running `target/debug/test_spiral`
+2024-10-21T08:12:11.871245Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
+2024-10-21T08:12:11.880725Z  WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
+        terminator_CreateInstance: Failed to CreateInstance in ICD 4.  Skipping ICD.    
+2024-10-21T08:12:11.880740Z  WARN wgpu_hal::vulkan::instance:   objects: (type: INSTANCE, hndl: 0x56a5fc78b4c0, name: ?)    
+2024-10-21T08:12:11.887924Z  WARN wgpu_hal::gles::egl: No config found!    
+2024-10-21T08:12:11.887939Z  WARN wgpu_hal::gles::egl: EGL says it can present to the window but not natively    
+2024-10-21T08:12:12.345086Z  INFO test_spiral: Hello Log
+2024-10-21T08:12:12.345107Z DEBUG test_spiral: Don't hide me
+2024-10-21T08:12:12.345155Z  INFO some_function{i=3}: test_spiral::spammy: Fizz
+2024-10-21T08:12:13.653510Z  INFO some_queries: test_spiral: not actually going to run
+</code></pre>
 <h3 id="spans"><a class="header" href="#spans">Spans</a></h3>
 <p>I think of spans as tags, I don't have a lot of experience with them so this will be brief and incomplete.</p>
 <p>My main use case for tags is grouping structually unrelated code that has a common theme such as timing or system type.</p>
@@ -535,9 +548,9 @@ fn main() {
   .init();
 
 <span class="boring">}</span></code></pre></pre>
-<p>I find time spammy with diff files
-I mentioned that <code>dbg!</code> had line numbers and file names.
-Pretty is useful for console remove if you are redirecting to a txt file</p>
+<p>I find timestamp is spammy with diff files so thats why <code>without_time</code> is there.
+I mentioned that <code>dbg!</code> had line numbers and file names, <code>with_file(true)</code>,`with_line_numbers(true)``.
+Pretty is useful for console, remove if you are redirecting to a txt file</p>
 <p>Now lets run</p>
 <pre><code>     Running `target/debug/test_spiral`
    WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation
@@ -619,8 +632,8 @@ Pretty is useful for console remove if you are redirecting to a txt file</p>
     at src/main.rs:96
     in test_spiral::some_queries
 </code></pre>
-<p>Line numbers and file names. You may be happy to just work from this point.
-Next chapters is basically breaking Tracing up into layers</p>
+<p>Line numbers and file names. You may be happy to just work on your game from this point.
+Next chapters is basically breaking Tracing up into layers so you can have multiple specialiesd files</p>
 
                     </main>
 

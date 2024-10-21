@@ -291,30 +291,45 @@ fn setup(
 
 </code></pre>
 <p>The console is absolutly flooded with debug messages from the bevy engine itself along with its dependencies.
-Libraries use a similar login scheme to what is about to be shown below the idea is that you can filter out irrelevant.
+Libraries use a similar logging scheme to what is about to be shown below the idea is that you can filter out the irrelevant logs.
 In order to start filtering we need to learn about levels and the Env filter.</p>
 <h2 id="log-levels"><a class="header" href="#log-levels">Log Levels</a></h2>
-<p>Tracing (Which the default Logplugin uses for most Operating Systems) has the below log levels from highest (most detailed) to lowest (most important)</p>
+<p>Tracing (Which the default Log plugin used for most Bevy Supported platforms with the major exceptions of the web and mobile) has the below log levels from highest (most detailed) to lowest (most important)</p>
 <ul>
-<li>Trace (Not printed by default)</li>
-<li>Debug (Not printed by default)</li>
-<li>Info (default level that is printed)</li>
-<li>Warn</li>
-<li>Error</li>
+<li><code>Trace</code> (Not printed by default)</li>
+<li><code>Debug</code> (Not printed by default)</li>
+<li><code>Info</code> (default level that is printed)</li>
+<li><code>Warn</code></li>
+<li><code>Error</code></li>
+<li><code>None</code> (you turned off logging)</li>
 </ul>
 <p>Its up to you what these mean exactly but here is how I use them in Bevy.</p>
 <ul>
-<li>Trace: details inside a loop</li>
-<li>Debug start or end of loops</li>
-<li>Info usually what I am working on currently I then set to either debug or trace. I also use this for information
+<li><code>Trace</code> details inside a loop</li>
+<li><code>Debug</code> start or end of loops</li>
+<li><code>Info</code> usually what I am working on currently I then set to either debug or trace. I also use this for information
 I want to display but haven't built the UI for yet</li>
-<li>Warn: I never use</li>
-<li>Error: let else fail when I don't expect it to</li>
+<li><code>Warn</code> I never use</li>
+<li><code>Error</code> let else fail when I don't expect it to</li>
 </ul>
+<p>Lower levels are more important, higher levels (by convention not enforcement!) are more verbose.</p>
+<p>For example at the default level <code>Info</code> the levels below <code>Warn</code> and <code>Error</code> will also print.</p>
+<p>Extract from the Tracing library</p>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use tracing_core::Level;
+
+assert!(Level::TRACE &gt; Level::DEBUG);
+assert!(Level::ERROR &lt; Level::WARN);
+assert!(Level::INFO &lt;= Level::DEBUG);
+assert_eq!(Level::TRACE, Level::TRACE);
+<span class="boring">}</span></code></pre></pre>
+<p>That is all for levels</p>
 <h2 id="env-filter"><a class="header" href="#env-filter">Env Filter</a></h2>
-<p>An env filter is used to put specific filters per target, span and fields. For now just equate targets with modules.
-Spans will be discussed later.</p>
-<p>To start with lets put a global env filter set all to warn this can give you useful messages such as a uinode without an appopriate parent</p>
+<p>An env filter is used to put specific filters per target, span and fields. For now just equate targets with modules.</p>
+<p>Spans will be discussed later.</p>
+<p>I have not needed fields, until I use them or someone else supplies an example fields are an excercise for the reader.</p>
+<p>To start with lets put a global env filter set all to warn, this can give you useful messages such as a uinode without an appopriate parent node</p>
 <pre><pre class="playground"><code class="language-rust edition2018">fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(LogPlugin {
@@ -334,9 +349,12 @@ Spans will be discussed later.</p>
 2024-10-19T22:03:13.952153Z  WARN wgpu_hal::gles::egl: No config found!    
 2024-10-19T22:03:13.952167Z  WARN wgpu_hal::gles::egl: EGL says it can present to the window but not natively    
 </code></pre>
+<h3 id="the-level-field"><a class="header" href="#the-level-field">The level field</a></h3>
+<p>The level field in the log plugin is a quick way to globally set all logs.
+A major use case is having release and debug modes with different log levels.</p>
 <h3 id="adding-our-own-logging"><a class="header" href="#adding-our-own-logging">Adding our own logging</a></h3>
-<p>Ok so lets add in our own startup warning message.
-We can print a warn message using Tracings macro</p>
+<p>Ok so lets add in our own startup warning message, warning because only they and errors will show.
+We can print a warn message using Tracings  supplied macro!s</p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn setup(
@@ -380,17 +398,18 @@ We can print a warn message using Tracings macro</p>
 2024-10-19T22:08:28.518035Z  WARN wgpu_hal::gles::egl: No config found!    
 2024-10-19T22:08:28.518049Z  WARN wgpu_hal::gles::egl: EGL says it can present to the window but not natively  
 </code></pre>
-<p>Perhaps unsurprisingly The message did not appear.</p>
+<p>Perhaps unsurprisingly The message did not appear as it is higher level then warning.
+Therefore our settings have declared this too verbose</p>
 <h3 id="higher-level-logging-for-our-application"><a class="header" href="#higher-level-logging-for-our-application">Higher level logging for our application</a></h3>
 <p>First lets add the depenencies</p>
 <p><code>cargo add tracing</code></p>
 <p><code>cargo add tracing-subscriber</code></p>
-<p>In order to show our applications logging we need to change the env filter to show our applications at info level or above.</p>
+<p>In order to show our applications logging we need to change the env filter to show our applications at <code>info</code> level or above.</p>
 <p>The syntax introduced will be to change targets</p>
 <p><code>cratename::modulename</code></p>
 <p>I called my example crate test_spiral</p>
-<p>so I will <code>test_spiral</code> there is no module name.</p>
-<p>Env filters are comma seperated so <code>warn,test_spiral=info</code> will mean "run warn level for as normal, for module test_spiral info"</p>
+<p>so it will <code>test_spiral</code> there is no module name.</p>
+<p>Env filters are comma seperated so <code>warn,test_spiral=info</code> will mean "run <code>warn</code> level for as normal, for module test_spiral <code>info</code>"</p>
 <pre><pre class="playground"><code class="language-rust edition2018">fn main() {
     App::new()
         //Disable the defaults
@@ -500,7 +519,7 @@ mod spammy {
     }
 }</code></pre></pre>
 <p><code>?i</code> just means use debug of that variable to print, otherwise you can use the macros same way as <code>println!</code>
-lets first change the log level for our application to be at trace</p>
+lets first change the log level for our application to be at <code>trace</code></p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>filter: "warn,test_spiral=trace".to_string(),
@@ -543,7 +562,7 @@ However for the sake of the excercies lets pretend that we sometimes is useful</
     debug!("Don't hide me");
 <span class="boring">}</span></code></pre></pre>
 <p>How do we just hide spammy's messages?</p>
-<p>Like so using the path that was printed <code>test_spiral::spammy</code></p>
+<p>we do it like so, using the path that was printed <code>test_spiral::spammy</code></p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>filter: "warn,test_spiral=trace,test_spiral::spammy=info".to_string(),
@@ -559,7 +578,7 @@ However for the sake of the excercies lets pretend that we sometimes is useful</
 2024-10-19T22:32:17.218967Z  INFO test_spiral: Hello Log
 2024-10-19T22:32:17.218988Z DEBUG test_spiral: Don't hide me
 </code></pre>
-<p>if a log does not appear that I think should I usually just put in error and copy the path</p>
+<p>If a log does not appear that I think should, I usually just put in at <code>error</code> and copy the path.</p>
 <p>We can now selectively hide messages when we need to! This exciting idea is what lead me to learning more about the tracing crate.</p>
 <p>But what about showing line numbers and extra details, this will be covered in the next chapter</p>
 
