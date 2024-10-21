@@ -186,6 +186,7 @@
 <h2 id="next-steps-from-what-we-have-learnt"><a class="header" href="#next-steps-from-what-we-have-learnt">Next Steps from what we have learnt</a></h2>
 <p>So far we have learned about logging levels and filtering by module our next goal is to learn how to add more context to our logs.</p>
 <h3 id="instrument"><a class="header" href="#instrument">instrument</a></h3>
+<p>instrument adds more context to your functions</p>
 <pre><pre class="playground"><code class="language-rust edition2018">
 use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
@@ -352,9 +353,15 @@ you need code that looks like this</p>
 let _guard = span.enter();
 <span class="boring">}</span></code></pre></pre>
 <p>Spans only apply when the logging level is set at it or above.
-note _guard is there to stop the variable being dropped immediately.
-While _guard is valid the span is applied.</p>
+note _guard is there to stop the variable being dropped immediately.</p>
+<p>While _guard is valid the span is entered.
+while span is valid the span is created</p>
 <p>There is shorthands for all logging levels such as <code>trace_span!</code></p>
+<p>You cannot combine the <code>span.enter</code> and span creation into one line as entering a span and creating
+are distinct things, A span is only created once while a span can be entered many times.</p>
+<p>Entering and exiting spans is <del>stuff I don't have much idea about</del> beyond the scope this tutorial.
+Spans <em>exit</em> when the variable holding the enter is dropped in this example the <code>_guard</code>
+Spans <em>Close</em> when the span variable is dropped</p>
 <p>we can use square brackets to filter by span</p>
 <p><code>filter: "warn,test_spiral=trace,test_spiral::spammy=info,test_spiral[start]=trace"</code></p>
 <p>Now for the entire code</p>
