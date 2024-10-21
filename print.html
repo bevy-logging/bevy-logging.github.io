@@ -200,8 +200,9 @@ however I have found this is not as much the case with Bevy.</p>
 <p>The documentation around Tracing is overwhelming for me and talks a lot about async which I have not used.</p>
 <h3 id="what-this-book-is-not"><a class="header" href="#what-this-book-is-not">What this book is not</a></h3>
 <p>This book will not talk about debugging tools beyond logging.</p>
-<p>Please note this document is not an official document of bevy's
-Referenced code can be found <a href="https://github.com/bevy-logging/test_spiral">here</a></p>
+<p>Please note this document is not an official document of bevy's</p>
+<p>Referenced code can be found <a href="https://github.com/bevy-logging/test_spiral">here</a>
+Or you could follow along on your own project.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="println-and-eprintln"><a class="header" href="#println-and-eprintln">Println! and eprintln</a></h1>
 <h2 id="println"><a class="header" href="#println">Println!</a></h2>
 <p>The first tool which you may reach for when you experience unexpected behaviour is <code>println!</code>.
@@ -1023,7 +1024,7 @@ fn main() {
 
 <span class="boring">}</span></code></pre></pre>
 <p>I find timestamp is spammy with diff files so thats why <code>without_time</code> is there.
-I mentioned that <code>dbg!</code> had line numbers and file names, <code>with_file(true)</code>,`with_line_numbers(true)``.
+I mentioned that <code>dbg!</code> had line numbers and file names, <code>with_file(true)</code>,<code>with_line_numbers(true)</code>.
 Pretty is useful for console, remove if you are redirecting to a txt file</p>
 <p>Now lets run</p>
 <pre><code>     Running `target/debug/test_spiral`
@@ -1136,7 +1137,7 @@ Observing spans as they are entered, exited, and closed, and events as they occu
 <p>Layers do the presentation and filtering of data, in the example above this sends data to the standard output.</p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let log_file = File::create("logs/yearly.log").unwrap();
+</span>let log_file = File::create("logs/start.log").unwrap();
 let start_layer = tracing_subscriber::fmt::layer()
     .with_line_number(true)
     .with_file(true)
@@ -1149,7 +1150,7 @@ let start_layer = tracing_subscriber::fmt::layer()
 <p>we can add them as below, just above your main application,</p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>//layers code above
+</span>//code for layers above
 tracing_subscriber::registry()
     .with(stdout_layer)
     .with(start_layer)
