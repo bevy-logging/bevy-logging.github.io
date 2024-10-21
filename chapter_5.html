@@ -348,6 +348,10 @@ test_spiral: not actually going to run
 2024-10-21T08:12:12.345155Z  INFO some_function{i=3}: test_spiral::spammy: Fizz
 2024-10-21T08:12:13.653510Z  INFO some_queries: test_spiral: not actually going to run
 </code></pre>
+<p>If you recall an earlier section of the book say equate targets with modules <em>for now</em></p>
+<p>You can change that using arguments to instruments, this will not be demonstrated however,
+As I have never had a need for it yet.</p>
+<p>More about instruments (here.)[https://docs.rs/tracing/latest/tracing/attr.instrument.html]</p>
 <h3 id="spans"><a class="header" href="#spans">Spans</a></h3>
 <p>I think of spans as tags, I don't have a lot of experience with them so this will be brief and incomplete.</p>
 <p>My main use case for tags is grouping structually unrelated code that has a common theme such as timing or system type.</p>
@@ -365,16 +369,17 @@ you need code that looks like this</p>
 </span>let span = span!(Level::DEBUG, "start");
 let _guard = span.enter();
 <span class="boring">}</span></code></pre></pre>
-<p>Spans only apply when the logging level is set at it or above.
-note _guard is there to stop the variable being dropped immediately.</p>
-<p>While _guard is valid the span is entered.
+<p>Spans only apply when the logging level is set at it or above.</p>
+<p>Note <code>_guard</code> is there to stop the variable being dropped immediately.
+The underscore is to stop unused errors as its drop behaviour is what really makes it work!</p>
+<p>While <code>_guard</code> is valid(undropped) the span is entered.
 while span is valid the span is created</p>
 <p>There is shorthands for all logging levels such as <code>trace_span!</code></p>
-<p>You cannot combine the <code>span.enter</code> and span creation into one line as entering a span and creating
-are distinct things, A span is only created once while a span can be entered many times.</p>
-<p>Entering and exiting spans is <del>stuff I don't have much idea about</del> beyond the scope this tutorial.
-Spans <em>exit</em> when the variable holding the enter is dropped in this example the <code>_guard</code>
-Spans <em>Close</em> when the span variable is dropped</p>
+<p>You cannot combine the <code>span(/* snip*/).enter</code>  into one line as <em>entering</em> a span and <em>creating</em>
+are distinct things, A span is only <em>created</em> once while a span can be <em>entered</em> many times.</p>
+<p>Entering and exiting spans is <del>stuff I don't have much idea about</del> beyond the scope this tutorial(mostly async stuff).</p>
+<p>Spans <em>exit</em> when the variable holding the enter is dropped in this example the <code>_guard</code>
+Spans <em>Close</em> when the span variable is dropped.</p>
 <p>we can use square brackets to filter by span</p>
 <p><code>filter: "warn,test_spiral=trace,test_spiral::spammy=info,test_spiral[start]=trace"</code></p>
 <p>Now for the entire code</p>
@@ -548,9 +553,17 @@ fn main() {
   .init();
 
 <span class="boring">}</span></code></pre></pre>
-<p>I find timestamp is spammy with diff files so thats why <code>without_time</code> is there.
-I mentioned that <code>dbg!</code> had line numbers and file names, <code>with_file(true)</code>,<code>with_line_numbers(true)</code>.
-Pretty is useful for console, remove if you are redirecting to a txt file</p>
+<ul>
+<li>
+<p>I find timestamp is spammy with diff files so thats why <code>without_time</code> is there.</p>
+</li>
+<li>
+<p>I mentioned that <code>dbg!</code> had line numbers and file names, <code>with_file(true)</code>,<code>with_line_numbers(true)</code>.</p>
+</li>
+<li>
+<p>Pretty is useful for console, remove if you are redirecting to a txt file</p>
+</li>
+</ul>
 <p>Now lets run</p>
 <pre><code>     Running `target/debug/test_spiral`
    WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation
