@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> Println </a></li><li class="chapter-item expanded "><a href="chapter_2.html"><strong aria-hidden="true">2.</strong> Redirecting output to a file</a></li><li class="chapter-item expanded "><a href="chapter_3.html"><strong aria-hidden="true">3.</strong> Dbg</a></li><li class="chapter-item expanded "><a href="chapter_4.html"><strong aria-hidden="true">4.</strong> The log plugin</a></li><li class="chapter-item expanded "><a href="chapter_5.html"><strong aria-hidden="true">5.</strong> Introduction to Tracing</a></li><li class="chapter-item expanded "><a href="chapter_6.html"><strong aria-hidden="true">6.</strong> Tracing Multiple outputs</a></li><li class="chapter-item expanded "><a href="chapter_7.html"><strong aria-hidden="true">7.</strong> Putting Layers into default plugin</a></li><li class="chapter-item expanded "><a href="chapter_8.html"><strong aria-hidden="true">8.</strong> Further Info</a></li><li class="chapter-item expanded "><a href="patterns.html"><strong aria-hidden="true">9.</strong> Design patterns</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">10.</strong> Contributing</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intoduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> Println </a></li><li class="chapter-item expanded "><a href="chapter_2.html"><strong aria-hidden="true">2.</strong> Redirecting output to a file</a></li><li class="chapter-item expanded "><a href="chapter_3.html"><strong aria-hidden="true">3.</strong> Dbg</a></li><li class="chapter-item expanded "><a href="chapter_4.html"><strong aria-hidden="true">4.</strong> The log plugin</a></li><li class="chapter-item expanded "><a href="chapter_5.html"><strong aria-hidden="true">5.</strong> Introduction to Tracing</a></li><li class="chapter-item expanded "><a href="chapter_6.html"><strong aria-hidden="true">6.</strong> Tracing Multiple outputs</a></li><li class="chapter-item expanded "><a href="chapter_7.html"><strong aria-hidden="true">7.</strong> Putting Layers into default plugin</a></li><li class="chapter-item expanded "><a href="chapter_8.html"><strong aria-hidden="true">8.</strong> Further Info</a></li><li class="chapter-item expanded "><a href="patterns.html"><strong aria-hidden="true">9.</strong> Design patterns</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">10.</strong> Contributing</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -193,21 +193,22 @@ however I have found this is not as much the case with Bevy.</p>
 <p>While Rust's compile-time checks catch many errors, Bevy's ECS can introduce runtime issues:</p>
 <ul>
 <li>Queries breaking due to component changes</li>
-<li>Systems running in unexpected orders</li>
+<li>Systems running in an unexpected orders</li>
 </ul>
 <p>Advanced logging and tracing help catch these issues earlier and provide more context for debugging.</p>
 <p>I hope to help the reader fix issues with their games quicker and give something back to the community.</p>
 <p>The documentation around Tracing is overwhelming for me and talks a lot about async which I have not used.</p>
 <h3 id="what-this-book-is-not"><a class="header" href="#what-this-book-is-not">What this book is not</a></h3>
 <p>This book will not talk about debugging tools beyond logging.</p>
-<p>Please note this document is not an official document of bevy's</p>
+<p>Please note this document is not an official document of bevy's
+Referenced code can be found <a href="https://github.com/bevy-logging/test_spiral">here</a></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="println-and-eprintln"><a class="header" href="#println-and-eprintln">Println! and eprintln</a></h1>
 <h2 id="println"><a class="header" href="#println">Println!</a></h2>
 <p>The first tool which you may reach for when you experience unexpected behaviour is <code>println!</code>.
 <code>println!</code> can be used as the name suggests to print values at key points of your program where your issue might lie.</p>
 <p>However</p>
 <ul>
-<li>Typingh or more likely copying and pasting <code>println!</code>'s everywhere gets quite tedious.</li>
+<li>Typing, or more likely copying and pasting <code>println!</code>'s everywhere gets quite tedious.</li>
 <li>Each <code>println!</code> should in most cases have some marking string that lets you know which one triggered,otherwise you have to do additional searching.</li>
 <li>At some point these <code>println!</code>'s need to removed or they will block up the logging.</li>
 </ul>
