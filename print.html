@@ -451,10 +451,10 @@ We can print a warn message using Tracings  supplied macro!s</p>
 2024-10-19T22:06:52.007886Z  WARN test_spiral: Hello Log
 
 </code></pre>
-<p>Great we can put a message there but its not really a warning we can move it to the info level.</p>
-<p>We use Tracings <code>info!</code> macro</p>
+<p>Great we can put a message there, but its not really a warning we can move it to the info level.</p>
+<p>We use Tracing's <code>info!</code> macro</p>
 <p><code>info!("Hello Log")</code></p>
-<p>now lets run</p>
+<p>Now lets run</p>
 <pre><code>
      Running `target/debug/test_spiral`
 2024-10-19T22:08:28.501325Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -465,7 +465,7 @@ We can print a warn message using Tracings  supplied macro!s</p>
 2024-10-19T22:08:28.518049Z  WARN wgpu_hal::gles::egl: EGL says it can present to the window but not natively  
 </code></pre>
 <p>Perhaps unsurprisingly The message did not appear as it is higher level then warning.
-Therefore our settings have declared this too verbose</p>
+Therefore our settings have declared this too verbose.</p>
 <h3 id="higher-level-logging-for-our-application"><a class="header" href="#higher-level-logging-for-our-application">Higher level logging for our application</a></h3>
 <p>First lets add the depenencies</p>
 <p><code>cargo add tracing</code></p>
@@ -474,7 +474,7 @@ Therefore our settings have declared this too verbose</p>
 <p>The syntax introduced will be to change targets</p>
 <p><code>cratename::modulename</code></p>
 <p>I called my example crate test_spiral</p>
-<p>so it will <code>test_spiral</code> there is no module name.</p>
+<p>So the target we supply to the env filter will be <code>test_spiral</code> there is no module name, therfore it is left blank.</p>
 <p>Env filters are comma seperated so <code>warn,test_spiral=info</code> will mean "run <code>warn</code> level for as normal, for module test_spiral <code>info</code>"</p>
 <pre><pre class="playground"><code class="language-rust edition2018">fn main() {
     App::new()
@@ -487,7 +487,7 @@ Therefore our settings have declared this too verbose</p>
         .add_systems(Startup, setup)
         .run();
 }</code></pre></pre>
-<p>lets run</p>
+<p>Lets run</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:12:21.298476Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
 2024-10-19T22:12:21.307716Z  WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
@@ -616,7 +616,7 @@ also note that the crate module path was printed <code>test_spiral::spammy</code
 <h4 id="filter-out-by-module"><a class="header" href="#filter-out-by-module">Filter out by module</a></h4>
 <p>Clearly we have a problem with spammy, we could just delete the spammy logs like we would have to do with techniques in the previous chapter.
 However for the sake of the excercies lets pretend that we sometimes is useful</p>
-<p>lets put in a log code so we cannot just change the applications logging levels</p>
+<p>Lets put in a log code so we cannot just change the applications logging levels</p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn setup(
@@ -628,7 +628,7 @@ However for the sake of the excercies lets pretend that we sometimes is useful</
     debug!("Don't hide me");
 <span class="boring">}</span></code></pre></pre>
 <p>How do we just hide spammy's messages?</p>
-<p>we do it like so, using the path that was printed <code>test_spiral::spammy</code></p>
+<p>We do it like so, using the path that was printed <code>test_spiral::spammy</code></p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>filter: "warn,test_spiral=trace,test_spiral::spammy=info".to_string(),
