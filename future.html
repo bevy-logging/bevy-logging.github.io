@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Tracing Multiple outputs - Logging with Bevy</title>
+        <title>Other features I have thought of using - Logging with Bevy</title>
 
 
         <!-- Custom HTML head -->
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intoduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> Println </a></li><li class="chapter-item expanded "><a href="chapter_2.html"><strong aria-hidden="true">2.</strong> Redirecting output to a file</a></li><li class="chapter-item expanded "><a href="chapter_3.html"><strong aria-hidden="true">3.</strong> Dbg</a></li><li class="chapter-item expanded "><a href="chapter_4.html"><strong aria-hidden="true">4.</strong> The log plugin</a></li><li class="chapter-item expanded "><a href="chapter_5.html"><strong aria-hidden="true">5.</strong> Introduction to Tracing</a></li><li class="chapter-item expanded "><a href="chapter_6.html" class="active"><strong aria-hidden="true">6.</strong> Tracing Multiple outputs</a></li><li class="chapter-item expanded "><a href="chapter_7.html"><strong aria-hidden="true">7.</strong> Putting Layers into default plugin</a></li><li class="chapter-item expanded "><a href="future.html"><strong aria-hidden="true">8.</strong> Other features I have thought of using</a></li><li class="chapter-item expanded "><a href="chapter_8.html"><strong aria-hidden="true">9.</strong> Further Info</a></li><li class="chapter-item expanded "><a href="patterns.html"><strong aria-hidden="true">10.</strong> Design patterns</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">11.</strong> Contributing</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intoduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> Println </a></li><li class="chapter-item expanded "><a href="chapter_2.html"><strong aria-hidden="true">2.</strong> Redirecting output to a file</a></li><li class="chapter-item expanded "><a href="chapter_3.html"><strong aria-hidden="true">3.</strong> Dbg</a></li><li class="chapter-item expanded "><a href="chapter_4.html"><strong aria-hidden="true">4.</strong> The log plugin</a></li><li class="chapter-item expanded "><a href="chapter_5.html"><strong aria-hidden="true">5.</strong> Introduction to Tracing</a></li><li class="chapter-item expanded "><a href="chapter_6.html"><strong aria-hidden="true">6.</strong> Tracing Multiple outputs</a></li><li class="chapter-item expanded "><a href="chapter_7.html"><strong aria-hidden="true">7.</strong> Putting Layers into default plugin</a></li><li class="chapter-item expanded "><a href="future.html" class="active"><strong aria-hidden="true">8.</strong> Other features I have thought of using</a></li><li class="chapter-item expanded "><a href="chapter_8.html"><strong aria-hidden="true">9.</strong> Further Info</a></li><li class="chapter-item expanded "><a href="patterns.html"><strong aria-hidden="true">10.</strong> Design patterns</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">11.</strong> Contributing</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -173,72 +173,21 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="tracing-multiple-files"><a class="header" href="#tracing-multiple-files">Tracing multiple files</a></h1>
-<p>Using our powers of span we can "Tag" our logs to go to seperate files per span, first we need to learn about layers.</p>
-<h2 id="subscribers"><a class="header" href="#subscribers">Subscribers</a></h2>
-<p>Subscribers carry many layers, I am not entirely sure about the definition of a subscriber but I believe its basically
-a consumer of tracing logs that decides how to output it. I have only used the one on the tracing crate but their are other
-variations such as tree logging.</p>
-<p>lets read the documentation
-"A subscriber is responsible for the following:</p>
-<pre><code>Registering new spans as they are created, and providing them with span IDs. Implicitly, this means the subscriber may determine the strategy for determining span equality.
-Recording the attachment of field values and follows-from annotations to spans.
-Filtering spans and events, and determining when those filters must be invalidated.
-Observing spans as they are entered, exited, and closed, and events as they occur.
-</code></pre>
-<p>"</p>
-<h2 id="layers"><a class="header" href="#layers">Layers</a></h2>
-<p>I will just start with an example.</p>
-<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let stdout_layer = tracing_subscriber::fmt::layer()
-    .with_line_number(true)
-    .with_file(true)
-    .without_time()
-    .pretty()
-    .with_filter(EnvFilter::from_str("warn").unwrap());
-<span class="boring">}</span></code></pre></pre>
-<p>Layers do the presentation and filtering of data, in the example above this sends data to the standard output.</p>
-<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let log_file = File::create("logs/start.log").unwrap();
-let start_layer = tracing_subscriber::fmt::layer()
-    .with_line_number(true)
-    .with_file(true)
-    .without_time()
-    .with_ansi(false)
-    .with_writer(Mutex::new(log_file))
-    .with_filter(EnvFilter::from_str("none,test_spiral::[start]").unwrap());
-<span class="boring">}</span></code></pre></pre>
-<p>This above layer will send the file to a file by output log based on all spans that have start</p>
-<p>we can add them as below, just above your main application,</p>
-<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>//code for layers above
-tracing_subscriber::registry()
-    .with(stdout_layer)
-    .with(start_layer)
-    .init();
-
-    App::new()
-        //Disable the defaults
-        .add_plugins(DefaultPlugins.build().disable::&lt;LogPlugin&gt;())
-        .add_systems(Startup, setup)
-        .add_systems(Startup, spammy::print_trash)
-        .add_systems(Update, some_queries.run_if(run_once()))
-        .run();
-
-<span class="boring">}</span></code></pre></pre>
+                        <h1 id="other-features-i-have-thought-of-using"><a class="header" href="#other-features-i-have-thought-of-using">Other features I have thought of using</a></h1>
+<h2 id="filtering-logs-by-value"><a class="header" href="#filtering-logs-by-value">Filtering logs by value</a></h2>
+<p>Lets say an argument or a variable when set to a certain value is causing issues.
+I think you can use {field=value} with field being the variable name.
+I have not however tested this or used this yet.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="chapter_5.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="chapter_7.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="chapter_7.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="chapter_8.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -248,11 +197,11 @@ tracing_subscriber::registry()
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="chapter_5.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="chapter_7.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="chapter_7.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="chapter_8.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

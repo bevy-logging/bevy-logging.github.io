@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intoduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> Println </a></li><li class="chapter-item expanded "><a href="chapter_2.html"><strong aria-hidden="true">2.</strong> Redirecting output to a file</a></li><li class="chapter-item expanded "><a href="chapter_3.html"><strong aria-hidden="true">3.</strong> Dbg</a></li><li class="chapter-item expanded "><a href="chapter_4.html"><strong aria-hidden="true">4.</strong> The log plugin</a></li><li class="chapter-item expanded "><a href="chapter_5.html"><strong aria-hidden="true">5.</strong> Introduction to Tracing</a></li><li class="chapter-item expanded "><a href="chapter_6.html"><strong aria-hidden="true">6.</strong> Tracing Multiple outputs</a></li><li class="chapter-item expanded "><a href="chapter_7.html"><strong aria-hidden="true">7.</strong> Putting Layers into default plugin</a></li><li class="chapter-item expanded "><a href="chapter_8.html"><strong aria-hidden="true">8.</strong> Further Info</a></li><li class="chapter-item expanded "><a href="patterns.html"><strong aria-hidden="true">9.</strong> Design patterns</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">10.</strong> Contributing</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intoduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> Println </a></li><li class="chapter-item expanded "><a href="chapter_2.html"><strong aria-hidden="true">2.</strong> Redirecting output to a file</a></li><li class="chapter-item expanded "><a href="chapter_3.html"><strong aria-hidden="true">3.</strong> Dbg</a></li><li class="chapter-item expanded "><a href="chapter_4.html"><strong aria-hidden="true">4.</strong> The log plugin</a></li><li class="chapter-item expanded "><a href="chapter_5.html"><strong aria-hidden="true">5.</strong> Introduction to Tracing</a></li><li class="chapter-item expanded "><a href="chapter_6.html"><strong aria-hidden="true">6.</strong> Tracing Multiple outputs</a></li><li class="chapter-item expanded "><a href="chapter_7.html"><strong aria-hidden="true">7.</strong> Putting Layers into default plugin</a></li><li class="chapter-item expanded "><a href="future.html"><strong aria-hidden="true">8.</strong> Other features I have thought of using</a></li><li class="chapter-item expanded "><a href="chapter_8.html"><strong aria-hidden="true">9.</strong> Further Info</a></li><li class="chapter-item expanded "><a href="patterns.html"><strong aria-hidden="true">10.</strong> Design patterns</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">11.</strong> Contributing</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -425,7 +425,7 @@ assert_eq!(Level::TRACE, Level::TRACE);
 A major use case is having release and debug modes with different log levels.</p>
 <h3 id="adding-our-own-logging"><a class="header" href="#adding-our-own-logging">Adding our own logging</a></h3>
 <p>Ok so lets add in our own startup warning message, warning because only they and errors will show.
-We can print a warn message using Tracings  supplied macro!s</p>
+We can print a warn message using Tracings supplied macros</p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn setup(
@@ -1181,6 +1181,11 @@ tracing_subscriber::registry()
 <div style="break-before: page; page-break-before: always;"></div><h1 id="putting-layers-in-you-default-plugin"><a class="header" href="#putting-layers-in-you-default-plugin">Putting layers in you default plugin</a></h1>
 <p>TODO: I am getting errors trying to do achieve this</p>
 <p>I have got logging working as expected via previous techniques so this is not a high priority for me.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="other-features-i-have-thought-of-using"><a class="header" href="#other-features-i-have-thought-of-using">Other features I have thought of using</a></h1>
+<h2 id="filtering-logs-by-value"><a class="header" href="#filtering-logs-by-value">Filtering logs by value</a></h2>
+<p>Lets say an argument or a variable when set to a certain value is causing issues.
+I think you can use {field=value} with field being the variable name.
+I have not however tested this or used this yet.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="further-info"><a class="header" href="#further-info">Further Info</a></h1>
 <p>You have reached the limit of my undestanding with Tracing useful links below.</p>
 <p><a href="https://docs.rs/tracing-subscriber/latest/tracing_subscriber/index.html">Docs on the subscriber crate</a></p>
