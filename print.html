@@ -395,7 +395,6 @@ assert!(Level::ERROR &lt; Level::WARN);
 assert!(Level::INFO &lt;= Level::DEBUG);
 assert_eq!(Level::TRACE, Level::TRACE);
 <span class="boring">}</span></code></pre></pre>
-<p>That is all for levels</p>
 <h2 id="env-filter"><a class="header" href="#env-filter">Env Filter</a></h2>
 <p>An env filter is used to put specific filters per target, span and fields. For now just equate targets with modules.</p>
 <p>Spans will be discussed later.</p>
@@ -454,11 +453,7 @@ We can print a warn message using Tracings  supplied macro!s</p>
 </code></pre>
 <p>Great we can put a message there but its not really a warning we can move it to the info level.</p>
 <p>We use Tracings <code>info!</code> macro</p>
-<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>    info!("Hello Log");
-
-<span class="boring">}</span></code></pre></pre>
+<p><code>info!("Hello Log")</code></p>
 <p>now lets run</p>
 <pre><code>
      Running `target/debug/test_spiral`
