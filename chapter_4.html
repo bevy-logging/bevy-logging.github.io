@@ -176,7 +176,7 @@
                         <h1 id="the-log-plugin"><a class="header" href="#the-log-plugin">The log Plugin</a></h1>
 <p>One of Bevy's default plugins is the log plugin.</p>
 <p>Lets configure the plugin then explain as we see what happens</p>
-<pre><code>fn main() {
+<pre><pre class="playground"><code class="language-rust edition2018">fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(LogPlugin {
             filter: "".to_string(),
@@ -187,11 +187,12 @@
         .run();
 }
 
-
-</code></pre>
+</code></pre></pre>
 <p>The rest of the code of an example application.</p>
 <p>Code can also be found <a href="https://github.com/bevy-logging/test_spiral">here.</a></p>
-<pre><code>use bevy::{log::LogPlugin, prelude::*};
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
 use tracing::Level;
 
@@ -256,7 +257,7 @@ fn setup(
 
 
 
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Run the code and see what happens.</p>
 <pre><code>//snip
 2024-10-19T21:46:13.389733Z TRACE wgpu_core::resource: Destroy raw Buffer (dropped) Id(1573,1,vk)    
@@ -313,7 +314,7 @@ In order to start filtering we need to learn about levels and the Env filter.</p
 <p>An env filter is used to put specific filters per target, span and fields. For now just equate targets with modules.
 Spans will be discussed later.</p>
 <p>To start with lets put a global env filter set all to warn this can give you useful messages such as a uinode without an appopriate parent</p>
-<pre><code>fn main() {
+<pre><pre class="playground"><code class="language-rust edition2018">fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(LogPlugin {
             filter: "warn".to_string(),
@@ -322,8 +323,7 @@ Spans will be discussed later.</p>
         }))
         .add_systems(Startup, setup)
         .run();
-}
-</code></pre>
+}</code></pre></pre>
 <p>The output in full is</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:03:13.935127Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -336,7 +336,9 @@ Spans will be discussed later.</p>
 <h3 id="adding-our-own-logging"><a class="header" href="#adding-our-own-logging">Adding our own logging</a></h3>
 <p>Ok so lets add in our own startup warning message.
 We can print a warn message using Tracings macro</p>
-<pre><code>fn setup(
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn setup(
     mut commands: Commands,
     mut meshes: ResMut&lt;Assets&lt;Mesh&gt;&gt;,
     mut materials: ResMut&lt;Assets&lt;StandardMaterial&gt;&gt;,
@@ -348,7 +350,7 @@ We can print a warn message using Tracings macro</p>
         ..default()
     });
 
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The output is</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:06:51.489315Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -362,9 +364,11 @@ We can print a warn message using Tracings macro</p>
 </code></pre>
 <p>Great we can put a message there but its not really a warning we can move it to the info level.</p>
 <p>We use Tracings <code>info!</code> macro</p>
-<pre><code>    info!("Hello Log");
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    info!("Hello Log");
 
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>now lets run</p>
 <pre><code>
      Running `target/debug/test_spiral`
@@ -386,7 +390,7 @@ We can print a warn message using Tracings macro</p>
 <p>I called my example crate test_spiral</p>
 <p>so I will <code>test_spiral</code> there is no module name.</p>
 <p>Env filters are comma seperated so <code>warn,test_spiral=info</code> will mean "run warn level for as normal, for module test_spiral info"</p>
-<pre><code>fn main() {
+<pre><pre class="playground"><code class="language-rust edition2018">fn main() {
     App::new()
         //Disable the defaults
         .add_plugins(DefaultPlugins.set(LogPlugin {
@@ -396,8 +400,7 @@ We can print a warn message using Tracings macro</p>
         }))
         .add_systems(Startup, setup)
         .run();
-}
-</code></pre>
+}</code></pre></pre>
 <p>lets run</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:12:21.298476Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -411,7 +414,7 @@ We can print a warn message using Tracings macro</p>
 <p>Excellent</p>
 <h3 id="module"><a class="header" href="#module">Module</a></h3>
 <p>We are going to make a second module we will keep it in the same file for simplicity but it will work for seperate files</p>
-<pre><code>use bevy::{log::LogPlugin, prelude::*};
+<pre><pre class="playground"><code class="language-rust edition2018">use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
 use tracing::Level;
 
@@ -494,12 +497,13 @@ mod spammy {
             trace!(?i);
         }
     }
-}
-</code></pre>
+}</code></pre></pre>
 <p><code>?i</code> just means use debug of that variable to print, otherwise you can use the macros same way as <code>println!</code>
 lets first change the log level for our application to be at trace</p>
-<pre><code>filter: "warn,test_spiral=trace".to_string(),
-</code></pre>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>filter: "warn,test_spiral=trace".to_string(),
+<span class="boring">}</span></code></pre></pre>
 <p>now run</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:24:05.510403Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -527,19 +531,23 @@ also note that the crate module path was printed <code>test_spiral::spammy</code
 <p>Clearly we have a problem with spammy, we could just delete the spammy logs like we would have to do with techniques in the previous chapter.
 However for the sake of the excercies lets pretend that we sometimes is useful</p>
 <p>lets put in a log code so we cannot just change the applications logging levels</p>
-<pre><code>fn setup(
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn setup(
     mut commands: Commands,
     mut meshes: ResMut&lt;Assets&lt;Mesh&gt;&gt;,
     mut materials: ResMut&lt;Assets&lt;StandardMaterial&gt;&gt;,
 ) {
     info!("Hello Log");
     debug!("Don't hide me");
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>How do we just hide spammy's messages?</p>
 <p>Like so using the path that was printed <code>test_spiral::spammy</code></p>
-<pre><code>filter: "warn,test_spiral=trace,test_spiral::spammy=info".to_string(),
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>filter: "warn,test_spiral=trace,test_spiral::spammy=info".to_string(),
 
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:32:16.697718Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
 2024-10-19T22:32:16.707200Z  WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]

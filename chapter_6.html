@@ -189,15 +189,19 @@ Observing spans as they are entered, exited, and closed, and events as they occu
 <p>"</p>
 <h2 id="layers"><a class="header" href="#layers">Layers</a></h2>
 <p>I will just start with an example.</p>
-<pre><code>let stdout_layer = tracing_subscriber::fmt::layer()
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let stdout_layer = tracing_subscriber::fmt::layer()
     .with_line_number(true)
     .with_file(true)
     .without_time()
     .pretty()
     .with_filter(EnvFilter::from_str("warn").unwrap());
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Layers do the presentation and filtering of data, in the example above this sends data to the standard output.</p>
-<pre><code>let log_file = File::create("logs/yearly.log").unwrap();
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let log_file = File::create("logs/yearly.log").unwrap();
 let start_layer = tracing_subscriber::fmt::layer()
     .with_line_number(true)
     .with_file(true)
@@ -205,10 +209,12 @@ let start_layer = tracing_subscriber::fmt::layer()
     .with_ansi(false)
     .with_writer(Mutex::new(log_file))
     .with_filter(EnvFilter::from_str("none,test_spiral::[start]").unwrap());
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This above layer will send the file to a file by output log based on all spans that have start</p>
 <p>we can add them as below, just above your main application,</p>
-<pre><code>//layers code above
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//layers code above
 tracing_subscriber::registry()
     .with(stdout_layer)
     .with(start_layer)
@@ -222,7 +228,7 @@ tracing_subscriber::registry()
         .add_systems(Update, some_queries.run_if(run_once()))
         .run();
 
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 
                     </main>
 

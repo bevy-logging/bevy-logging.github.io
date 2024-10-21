@@ -228,11 +228,13 @@ manage all that information</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="dbg-macro"><a class="header" href="#dbg-macro">Dbg macro</a></h1>
 <p>The <code>dbg!</code> macro introduced in version <code>1.32</code> is pretty much a <code>println!</code> made for debugging.</p>
 <p>An example from the official docs page</p>
-<pre><code>let a = 2;
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let a = 2;
 let b = dbg!(a * 2) + 1;
 //      ^-- prints: [src/main.rs:2:9] a * 2 = 4
 assert_eq!(b, 5);
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Notice that the file path and line numbers are printed.
 This metadata is generated at compile time so will keep up with changes made in your program.</p>
 <p>This means it less essential to make your <code>dbg</code> statements unique.</p>
@@ -244,7 +246,7 @@ This metadata is generated at compile time so will keep up with changes made in 
 <div style="break-before: page; page-break-before: always;"></div><h1 id="the-log-plugin"><a class="header" href="#the-log-plugin">The log Plugin</a></h1>
 <p>One of Bevy's default plugins is the log plugin.</p>
 <p>Lets configure the plugin then explain as we see what happens</p>
-<pre><code>fn main() {
+<pre><pre class="playground"><code class="language-rust edition2018">fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(LogPlugin {
             filter: "".to_string(),
@@ -255,11 +257,12 @@ This metadata is generated at compile time so will keep up with changes made in 
         .run();
 }
 
-
-</code></pre>
+</code></pre></pre>
 <p>The rest of the code of an example application.</p>
 <p>Code can also be found <a href="https://github.com/bevy-logging/test_spiral">here.</a></p>
-<pre><code>use bevy::{log::LogPlugin, prelude::*};
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
 use tracing::Level;
 
@@ -324,7 +327,7 @@ fn setup(
 
 
 
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Run the code and see what happens.</p>
 <pre><code>//snip
 2024-10-19T21:46:13.389733Z TRACE wgpu_core::resource: Destroy raw Buffer (dropped) Id(1573,1,vk)    
@@ -381,7 +384,7 @@ In order to start filtering we need to learn about levels and the Env filter.</p
 <p>An env filter is used to put specific filters per target, span and fields. For now just equate targets with modules.
 Spans will be discussed later.</p>
 <p>To start with lets put a global env filter set all to warn this can give you useful messages such as a uinode without an appopriate parent</p>
-<pre><code>fn main() {
+<pre><pre class="playground"><code class="language-rust edition2018">fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(LogPlugin {
             filter: "warn".to_string(),
@@ -390,8 +393,7 @@ Spans will be discussed later.</p>
         }))
         .add_systems(Startup, setup)
         .run();
-}
-</code></pre>
+}</code></pre></pre>
 <p>The output in full is</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:03:13.935127Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -404,7 +406,9 @@ Spans will be discussed later.</p>
 <h3 id="adding-our-own-logging"><a class="header" href="#adding-our-own-logging">Adding our own logging</a></h3>
 <p>Ok so lets add in our own startup warning message.
 We can print a warn message using Tracings macro</p>
-<pre><code>fn setup(
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn setup(
     mut commands: Commands,
     mut meshes: ResMut&lt;Assets&lt;Mesh&gt;&gt;,
     mut materials: ResMut&lt;Assets&lt;StandardMaterial&gt;&gt;,
@@ -416,7 +420,7 @@ We can print a warn message using Tracings macro</p>
         ..default()
     });
 
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The output is</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:06:51.489315Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -430,9 +434,11 @@ We can print a warn message using Tracings macro</p>
 </code></pre>
 <p>Great we can put a message there but its not really a warning we can move it to the info level.</p>
 <p>We use Tracings <code>info!</code> macro</p>
-<pre><code>    info!("Hello Log");
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    info!("Hello Log");
 
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>now lets run</p>
 <pre><code>
      Running `target/debug/test_spiral`
@@ -454,7 +460,7 @@ We can print a warn message using Tracings macro</p>
 <p>I called my example crate test_spiral</p>
 <p>so I will <code>test_spiral</code> there is no module name.</p>
 <p>Env filters are comma seperated so <code>warn,test_spiral=info</code> will mean "run warn level for as normal, for module test_spiral info"</p>
-<pre><code>fn main() {
+<pre><pre class="playground"><code class="language-rust edition2018">fn main() {
     App::new()
         //Disable the defaults
         .add_plugins(DefaultPlugins.set(LogPlugin {
@@ -464,8 +470,7 @@ We can print a warn message using Tracings macro</p>
         }))
         .add_systems(Startup, setup)
         .run();
-}
-</code></pre>
+}</code></pre></pre>
 <p>lets run</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:12:21.298476Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -479,7 +484,7 @@ We can print a warn message using Tracings macro</p>
 <p>Excellent</p>
 <h3 id="module"><a class="header" href="#module">Module</a></h3>
 <p>We are going to make a second module we will keep it in the same file for simplicity but it will work for seperate files</p>
-<pre><code>use bevy::{log::LogPlugin, prelude::*};
+<pre><pre class="playground"><code class="language-rust edition2018">use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
 use tracing::Level;
 
@@ -562,12 +567,13 @@ mod spammy {
             trace!(?i);
         }
     }
-}
-</code></pre>
+}</code></pre></pre>
 <p><code>?i</code> just means use debug of that variable to print, otherwise you can use the macros same way as <code>println!</code>
 lets first change the log level for our application to be at trace</p>
-<pre><code>filter: "warn,test_spiral=trace".to_string(),
-</code></pre>
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>filter: "warn,test_spiral=trace".to_string(),
+<span class="boring">}</span></code></pre></pre>
 <p>now run</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:24:05.510403Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -595,19 +601,23 @@ also note that the crate module path was printed <code>test_spiral::spammy</code
 <p>Clearly we have a problem with spammy, we could just delete the spammy logs like we would have to do with techniques in the previous chapter.
 However for the sake of the excercies lets pretend that we sometimes is useful</p>
 <p>lets put in a log code so we cannot just change the applications logging levels</p>
-<pre><code>fn setup(
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn setup(
     mut commands: Commands,
     mut meshes: ResMut&lt;Assets&lt;Mesh&gt;&gt;,
     mut materials: ResMut&lt;Assets&lt;StandardMaterial&gt;&gt;,
 ) {
     info!("Hello Log");
     debug!("Don't hide me");
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>How do we just hide spammy's messages?</p>
 <p>Like so using the path that was printed <code>test_spiral::spammy</code></p>
-<pre><code>filter: "warn,test_spiral=trace,test_spiral::spammy=info".to_string(),
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>filter: "warn,test_spiral=trace,test_spiral::spammy=info".to_string(),
 
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:32:16.697718Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
 2024-10-19T22:32:16.707200Z  WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
@@ -634,7 +644,7 @@ However for the sake of the excercies lets pretend that we sometimes is useful</
 <h2 id="next-steps-from-what-we-have-learnt"><a class="header" href="#next-steps-from-what-we-have-learnt">Next Steps from what we have learnt</a></h2>
 <p>So far we have learned about logging levels and filtering by module our next goal is to learn how to add more context to our logs.</p>
 <h3 id="instrument"><a class="header" href="#instrument">instrument</a></h3>
-<pre><code>
+<pre><pre class="playground"><code class="language-rust edition2018">
 use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
 use tracing::Level;
@@ -726,16 +736,17 @@ mod spammy {
             info!("Fizz");
         }
     }
-}
-</code></pre>
+}</code></pre></pre>
 <p>Of particular note is instrument</p>
-<pre><code>#[instrument]
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[instrument]
     fn some_function(i: u8) {
         if i == 3 {
             info!("Fizz");
         }
     }
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Lets run</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:42:47.680435Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -754,11 +765,13 @@ mod spammy {
 <p>I tend to use skip_all for all my systems as queries can be quite spammy
 If I am a system to query all transforms</p>
 <p><code>.add_systems(Update, some_queries.run_if(run_once()))</code></p>
-<pre><code>#[instrument]
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[instrument]
 fn some_queries(transformers: Query&lt;&amp;Transform&gt;) {
     info!("not actually going to run");
 }
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>The output gets quite verbose per query</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:49:03.036115Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -791,9 +804,11 @@ test_spiral: not actually going to run
 <p>You can use as many spans as you want.</p>
 <p>Now lets look at the syntax to use a span inside a fuction
 you need code that looks like this</p>
-<pre><code>let span = span!(Level::DEBUG, "start");
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let span = span!(Level::DEBUG, "start");
 let _guard = span.enter();
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Spans only apply when the logging level is set at it or above.
 note _guard is there to stop the variable being dropped immediately.
 While _guard is valid the span is applied.</p>
@@ -801,7 +816,7 @@ While _guard is valid the span is applied.</p>
 <p>we can use square brackets to filter by span</p>
 <p><code>filter: "warn,test_spiral=trace,test_spiral::spammy=info,test_spiral[start]=trace"</code></p>
 <p>Now for the entire code</p>
-<pre><code>use bevy::{log::LogPlugin, prelude::*};
+<pre><pre class="playground"><code class="language-rust edition2018">use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
 use tracing::{instrument, span, Level};
 
@@ -910,8 +925,7 @@ mod spammy {
         }
     }
 }
-
-</code></pre>
+</code></pre></pre>
 <p>The output</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T23:11:16.601564Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -940,7 +954,7 @@ mod spammy {
 <p>For the sake of learning we will disable the default plugin and use Tracing itself.
 This also means you can use Tracing on other applications using what you have learnt here.
 Tracing uses a subscriber made up of layers I don't really understand the details</p>
-<pre><code>use bevy::{log::LogPlugin, prelude::*};
+<pre><pre class="playground"><code class="language-rust edition2018">use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
 use tracing::{instrument, span, Level};
 
@@ -954,10 +968,11 @@ fn main() {
         .add_systems(Startup, spammy::print_trash)
         .add_systems(Update, some_queries.run_if(run_once()))
         .run();
-}
-</code></pre>
+}</code></pre></pre>
 <p>Lets modify Tracing</p>
-<pre><code>tracing_subscriber::fmt()
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>tracing_subscriber::fmt()
   .without_time()
   .with_file(true)
   .with_line_number(true)
@@ -970,7 +985,7 @@ fn main() {
   )
   .init();
 
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>I find time spammy with diff files
 I mentioned that <code>dbg!</code> had line numbers and file names.
 Pretty is useful for console remove if you are redirecting to a txt file</p>
@@ -1073,15 +1088,19 @@ Observing spans as they are entered, exited, and closed, and events as they occu
 <p>"</p>
 <h2 id="layers"><a class="header" href="#layers">Layers</a></h2>
 <p>I will just start with an example.</p>
-<pre><code>let stdout_layer = tracing_subscriber::fmt::layer()
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let stdout_layer = tracing_subscriber::fmt::layer()
     .with_line_number(true)
     .with_file(true)
     .without_time()
     .pretty()
     .with_filter(EnvFilter::from_str("warn").unwrap());
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>Layers do the presentation and filtering of data, in the example above this sends data to the standard output.</p>
-<pre><code>let log_file = File::create("logs/yearly.log").unwrap();
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let log_file = File::create("logs/yearly.log").unwrap();
 let start_layer = tracing_subscriber::fmt::layer()
     .with_line_number(true)
     .with_file(true)
@@ -1089,10 +1108,12 @@ let start_layer = tracing_subscriber::fmt::layer()
     .with_ansi(false)
     .with_writer(Mutex::new(log_file))
     .with_filter(EnvFilter::from_str("none,test_spiral::[start]").unwrap());
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <p>This above layer will send the file to a file by output log based on all spans that have start</p>
 <p>we can add them as below, just above your main application,</p>
-<pre><code>//layers code above
+<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//layers code above
 tracing_subscriber::registry()
     .with(stdout_layer)
     .with(start_layer)
@@ -1106,14 +1127,15 @@ tracing_subscriber::registry()
         .add_systems(Update, some_queries.run_if(run_once()))
         .run();
 
-</code></pre>
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="putting-layers-in-you-default-plugin"><a class="header" href="#putting-layers-in-you-default-plugin">Putting layers in you default plugin</a></h1>
 <p>TODO: I am getting errors trying to do achieve this</p>
 <p>I have got logging working as expected via previous techniques so this is not a high priority for me.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="further-info"><a class="header" href="#further-info">Further Info</a></h1>
 <p>You have reached the limit of my undestanding with Tracing useful links below.</p>
 <p><a href="https://docs.rs/tracing-subscriber/latest/tracing_subscriber/index.html">Docs on the subscriber crate</a></p>
-<p><a href="https://www.youtube.com/watch?v=21rtHinFA40">Jon Gjengset discussing tracing</a></p>
+<p><a href="https://www.youtube.com/watch?v=21rtHinFA40">Jon Gjengset "decrusting" tracing</a></p>
+<p><a href="https://rust-exercises.com/telemetry/">Another tutorial</a></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="design-patterns"><a class="header" href="#design-patterns">Design patterns</a></h1>
 <h2 id="log-let-else-queries"><a class="header" href="#log-let-else-queries">Log let else queries</a></h2>
 <p>The typical quick way when prototyping queries with only one expected item is to just use <code>unwrap</code></p>
