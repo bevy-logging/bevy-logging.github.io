@@ -196,7 +196,8 @@ Observing spans as they are entered, exited, and closed, and events as they occu
     .with_file(true)
     .without_time()
     .pretty()
-    .with_filter(EnvFilter::from_str("warn").unwrap());
+    /* Put less important stuff info files */
+    .with_filter(EnvFilter::from_str("warn,test_spiral=info").unwrap());
 <span class="boring">}</span></code></pre></pre>
 <p>Layers do the presentation and filtering of data, in the example above this sends data to the standard output.</p>
 <pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
