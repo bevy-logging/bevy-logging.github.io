@@ -187,7 +187,7 @@
 <p>So far we have learned about logging levels and filtering by module our next goal is to learn how to add more context to our logs.</p>
 <h3 id="instrument"><a class="header" href="#instrument">instrument</a></h3>
 <p><code>instrument</code> adds more context to your functions</p>
-<pre><pre class="playground"><code class="language-rust edition2018">
+<pre><code class="language-rust">
 use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
 use tracing::Level;
@@ -279,17 +279,14 @@ mod spammy {
             info!("Fizz");
         }
     }
-}</code></pre></pre>
+}</code></pre>
 <p>Of particular note is <code>instrument</code></p>
-<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>#[instrument]
+<pre><code class="language-rust">#[instrument]
     fn some_function(i: u8) {
         if i == 3 {
             info!("Fizz");
         }
-    }
-<span class="boring">}</span></code></pre></pre>
+    }</code></pre>
 <p>Lets run</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:42:47.680435Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -308,13 +305,10 @@ mod spammy {
 <p>I tend to use skip_all for all my systems as queries can be quite spammy.
 If create a system to query all transforms</p>
 <p><code>.add_systems(Update, some_queries.run_if(run_once()))</code></p>
-<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>#[instrument]
+<pre><code class="language-rust">#[instrument]
 fn some_queries(transformers: Query&lt;&amp;Transform&gt;) {
     info!("not actually going to run");
-}
-<span class="boring">}</span></code></pre></pre>
+}</code></pre>
 <p>The output gets quite verbose per query.</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:49:03.036115Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -364,11 +358,8 @@ As I have never had a need for it yet.</p>
 <p>You can use as many spans as you want.</p>
 <p>Now lets look at the syntax to use a span inside a fuction
 you need code that looks like this</p>
-<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let span = span!(Level::DEBUG, "start");
-let _guard = span.enter();
-<span class="boring">}</span></code></pre></pre>
+<pre><code class="language-rust">let span = span!(Level::DEBUG, "start");
+let _guard = span.enter();</code></pre>
 <p>Spans only apply when the logging level is set at it or above.</p>
 <p>Note <code>_guard</code> is there to stop the variable being dropped immediately.
 The underscore is to stop unused errors as its drop behaviour is what really makes it work!</p>
@@ -383,7 +374,7 @@ Spans <em>Close</em> when the span variable is dropped.</p>
 <p>we can use square brackets to filter by span</p>
 <p><code>filter: "warn,test_spiral=trace,test_spiral::spammy=info,test_spiral[start]=trace"</code></p>
 <p>Now for the entire code</p>
-<pre><pre class="playground"><code class="language-rust edition2018">use bevy::{log::LogPlugin, prelude::*};
+<pre><code class="language-rust">use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
 use tracing::{instrument, span, Level};
 
@@ -492,7 +483,7 @@ mod spammy {
         }
     }
 }
-</code></pre></pre>
+</code></pre>
 <p>The output</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T23:11:16.601564Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -521,7 +512,7 @@ mod spammy {
 <p>For the sake of learning we will disable the default plugin and use Tracing itself.
 This also means you can use Tracing on other applications using what you have learnt here.
 Tracing uses a subscriber made up of layers I don't really understand the details</p>
-<pre><pre class="playground"><code class="language-rust edition2018">use bevy::{log::LogPlugin, prelude::*};
+<pre><code class="language-rust">use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
 use tracing::{instrument, span, Level};
 
@@ -535,11 +526,9 @@ fn main() {
         .add_systems(Startup, spammy::print_trash)
         .add_systems(Update, some_queries.run_if(run_once()))
         .run();
-}</code></pre></pre>
+}</code></pre>
 <p>Lets modify Tracing</p>
-<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>tracing_subscriber::fmt()
+<pre><code class="language-rust">tracing_subscriber::fmt()
   .without_time()
   .with_file(true)
   .with_line_number(true)
@@ -551,8 +540,7 @@ fn main() {
       .unwrap(),
   )
   .init();
-
-<span class="boring">}</span></code></pre></pre>
+</code></pre>
 <ul>
 <li>
 <p>I find timestamp is spammy with diff files so thats why <code>without_time</code> is there.</p>

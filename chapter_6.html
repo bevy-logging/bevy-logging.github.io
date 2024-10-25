@@ -189,33 +189,25 @@ Observing spans as they are entered, exited, and closed, and events as they occu
 <p>"</p>
 <h2 id="layers"><a class="header" href="#layers">Layers</a></h2>
 <p>I will just start with an example.</p>
-<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let stdout_layer = tracing_subscriber::fmt::layer()
+<pre><code class="language-rust">let stdout_layer = tracing_subscriber::fmt::layer()
     .with_line_number(true)
     .with_file(true)
     .without_time()
     .pretty()
     /* Put less important stuff info files */
-    .with_filter(EnvFilter::from_str("warn,test_spiral=info").unwrap());
-<span class="boring">}</span></code></pre></pre>
+    .with_filter(EnvFilter::from_str("warn,test_spiral=info").unwrap());</code></pre>
 <p>Layers do the presentation and filtering of data, in the example above this sends data to the standard output.</p>
-<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let log_file = File::create("logs/start.log").unwrap();
+<pre><code class="language-rust">let log_file = File::create("logs/start.log").unwrap();
 let start_layer = tracing_subscriber::fmt::layer()
     .with_line_number(true)
     .with_file(true)
     .without_time()
     .with_ansi(false)
     .with_writer(Mutex::new(log_file))
-    .with_filter(EnvFilter::from_str("none,test_spiral::[start]=trace").unwrap());
-<span class="boring">}</span></code></pre></pre>
+    .with_filter(EnvFilter::from_str("none,test_spiral::[start]=trace").unwrap());</code></pre>
 <p>This above layer will send the file to a file by output log based on all spans that have start</p>
 <p>we can add them as below, just above your main application,</p>
-<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>//code for layers above
+<pre><code class="language-rust">//code for layers above
 tracing_subscriber::registry()
     .with(stdout_layer)
     .with(start_layer)
@@ -228,8 +220,7 @@ tracing_subscriber::registry()
         .add_systems(Startup, spammy::print_trash)
         .add_systems(Update, some_queries.run_if(run_once()))
         .run();
-
-<span class="boring">}</span></code></pre></pre>
+</code></pre>
 
                     </main>
 

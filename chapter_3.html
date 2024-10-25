@@ -176,13 +176,10 @@
                         <h1 id="dbg-macro"><a class="header" href="#dbg-macro">Dbg macro</a></h1>
 <p>The <code>dbg!</code> macro introduced in version <code>1.32</code> is pretty much a <code>println!</code> made for debugging.</p>
 <p>An example from the official docs page</p>
-<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let a = 2;
+<pre><code class="language-rust">let a = 2;
 let b = dbg!(a * 2) + 1;
 //      ^-- prints: [src/main.rs:2:9] a * 2 = 4
-assert_eq!(b, 5);
-<span class="boring">}</span></code></pre></pre>
+assert_eq!(b, 5);</code></pre>
 <p>Notice that the file path and line numbers are printed.
 This metadata is generated at compile time so will keep up with changes made in your program.</p>
 <p>This means it less essential to make your <code>dbg</code> statements unique.</p>

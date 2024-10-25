@@ -179,7 +179,7 @@
 <p>However a slighter better option is to use <code>let else</code> statements.</p>
 <p>lets start with an example</p>
 <p>based on our code <a href="https://github.com/bevy-logging/test_spiral">here.</a></p>
-<pre><pre class="playground"><code class="language-rust edition2018">
+<pre><code class="language-rust">
 use std::str::FromStr;
 
 use bevy::{log::LogPlugin, prelude::*};
@@ -271,7 +271,7 @@ mod spammy {
     fn some_function(i: u8) {
         if i == 3 {}
     }
-}</code></pre></pre>
+}</code></pre>
 <p>A query has been added for the pointlight but it no longer is created
 we can see what happens</p>
 <pre><code>     Running `target/debug/test_spiral`
@@ -287,17 +287,14 @@ Encountered a panic in system `bevy_app::main_schedule::Main::run_main`!
 </code></pre>
 <p>A crash its good we got the issue pointed out to us straight away but we could change
 the query_light function to be as below.</p>
-<pre><pre class="playground"><code class="language-rust edition2018"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>fn query_light(light_query: Query&lt;&amp;PointLight&gt;) {
+<pre><code class="language-rust">fn query_light(light_query: Query&lt;&amp;PointLight&gt;) {
     let light = light_query.get_single() else {
         error!("no light found");
         return;
     };
 
     info!("found the light");
-}
-<span class="boring">}</span></code></pre></pre>
+}</code></pre>
 <p>By stopping crashing but logging the issues we can keep the game going and possibly find
 multiple issues in one run.</p>
 <p>Plus if the system is not that vital, we don't need to ruin the user's experience.</p>
