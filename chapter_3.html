@@ -181,9 +181,9 @@ let b = dbg!(a * 2) + 1;
 //      ^-- prints: [src/main.rs:2:9] a * 2 = 4
 assert_eq!(b, 5);</code></pre>
 <p>Notice that the file path and line numbers are printed.
-This metadata is generated at compile time so will keep up with changes made in your program.</p>
-<p>This means it less essential to make your <code>dbg</code> statements unique.</p>
-<p>However there are still some disadvantages (same as <code>println!</code>)</p>
+This metadata is generated at compile time, so it will keep up with changes made in your program.</p>
+<p>This means it is less essential to make your <code>dbg</code> statements unique.</p>
+<p>However, there are still some disadvantages (same as <code>println!</code>)</p>
 <ul>
 <li>Typing or more likely copying and pasting <code>dbg!</code>'s everywhere gets quite tedious</li>
 <li>At some point these <code>dbg!</code>'s need to removed or they will block up the logging</li>

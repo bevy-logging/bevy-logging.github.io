@@ -175,7 +175,7 @@
                     <main>
                         <h1 id="the-log-plugin"><a class="header" href="#the-log-plugin">The log Plugin</a></h1>
 <p>One of Bevy's default plugins is the log plugin.</p>
-<p>Lets configure the plugin then explain as we see what happens</p>
+<p>Let's configure the plugin, then explain as we see what happens</p>
 <pre><code class="language-rust">fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(LogPlugin {
@@ -187,8 +187,7 @@
         .run();
 }
 
-</code></pre>
-<p>The rest of the code of an example application.</p>
+// The rest of the code...</code></pre>
 <p>Code can also be found <a href="https://github.com/bevy-logging/test_spiral">here.</a></p>
 <pre><code class="language-rust">use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
@@ -287,11 +286,11 @@ fn setup(
 2024-10-19T21:46:13.389895Z TRACE wgpu_core::resource: Destroy raw Buffer (dropped) "Mesh Index Buffer"  
 
 </code></pre>
-<p>The console is absolutly flooded with debug messages from the bevy engine itself along with its dependencies.
-Libraries use a similar logging scheme to what is about to be shown below the idea is that you can filter out the irrelevant logs.
-In order to start filtering we need to learn about levels and the Env filter.</p>
+<p>The console is absolutely flooded with debug messages from the Bevy engine itself, along with its dependencies.
+Libraries use a similar logging scheme to what is about to be shown below. The idea is that you can filter out the irrelevant logs.
+In order to start filtering, we need to learn about levels and the Env filter.</p>
 <h2 id="log-levels"><a class="header" href="#log-levels">Log Levels</a></h2>
-<p>Tracing (Which the default Log plugin used for most Bevy Supported platforms with the major exceptions of the web and mobile) has the below log levels from highest (most detailed) to lowest (most important)</p>
+<p>Tracing (The default Log plugin used for most Bevy Supported platforms with the major exceptions of the web and mobile) has the below log levels from highest (most detailed) to lowest (most important)</p>
 <ul>
 <li><code>Trace</code> (Not printed by default)</li>
 <li><code>Debug</code> (Not printed by default)</li>
@@ -300,17 +299,17 @@ In order to start filtering we need to learn about levels and the Env filter.</p
 <li><code>Error</code></li>
 <li><code>None</code> (you turned off logging)</li>
 </ul>
-<p>Its up to you what these mean exactly but here is how I use them in Bevy.</p>
+<p>It's up to you what these mean exactly, but here is how I use them in Bevy.</p>
 <ul>
 <li><code>Trace</code> details inside a loop</li>
 <li><code>Debug</code> start or end of loops</li>
-<li><code>Info</code> usually what I am working on currently I then set to either debug or trace. I also use this for information
+<li><code>Info</code> usually what I am working on currently, I then set it to either debug or trace. I also use this for information
 I want to display but haven't built the UI for yet</li>
 <li><code>Warn</code> I never use</li>
 <li><code>Error</code> let else fail when I don't expect it to</li>
 </ul>
-<p>Lower levels are more important, higher levels (by convention not enforcement!) are more verbose.</p>
-<p>For example at the default level <code>Info</code> the levels below <code>Warn</code> and <code>Error</code> will also print.</p>
+<p>Lower levels are more important, while higher levels (by convention, not enforcement!) are more verbose.</p>
+<p>For example, at the default level <code>Info</code> the levels below <code>Warn</code> and <code>Error</code> will also print.</p>
 <p>Extract from the Tracing library</p>
 <pre><code class="language-rust">use tracing_core::Level;
 
@@ -322,7 +321,7 @@ assert_eq!(Level::TRACE, Level::TRACE);</code></pre>
 <p>An env filter is used to put specific filters per target, span and fields. For now just equate targets with modules.</p>
 <p>Spans will be discussed later.</p>
 <p>I have not needed fields, until I use them or someone else supplies an example fields are an excercise for the reader.</p>
-<p>To start with lets put a global env filter set all to warn, this can give you useful messages such as a uinode without an appopriate parent node</p>
+<p>To start with let's put a global env filter set all to warn, this can give you useful messages such as a UI-node without an appropriate parent node</p>
 <pre><code class="language-rust">fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(LogPlugin {
@@ -343,11 +342,11 @@ assert_eq!(Level::TRACE, Level::TRACE);</code></pre>
 2024-10-19T22:03:13.952167Z  WARN wgpu_hal::gles::egl: EGL says it can present to the window but not natively    
 </code></pre>
 <h3 id="the-level-field"><a class="header" href="#the-level-field">The level field</a></h3>
-<p>The level field in the log plugin is a quick way to globally set all logs.
+<p>The level field in the log plugin is a quick way to set all logs globally.
 A major use case is having release and debug modes with different log levels.</p>
 <h3 id="adding-our-own-logging"><a class="header" href="#adding-our-own-logging">Adding our own logging</a></h3>
-<p>Ok so lets add in our own startup warning message, warning because only they and errors will show.
-We can print a warn message using Tracings supplied macros</p>
+<p>Ok, so let's add in our own startup warning message, warning because only they and errors will show.
+We can print a <code>Warn</code> message using Tracing's supplied macros</p>
 <pre><code class="language-rust">fn setup(
     mut commands: Commands,
     mut meshes: ResMut&lt;Assets&lt;Mesh&gt;&gt;,
@@ -371,10 +370,10 @@ We can print a warn message using Tracings supplied macros</p>
 2024-10-19T22:06:52.007886Z  WARN test_spiral: Hello Log
 
 </code></pre>
-<p>Great we can put a message there, but its not really a warning we can move it to the info level.</p>
+<p>Great. We can put a message there, but it's not really a warning, so we can move it to the info level.</p>
 <p>We use Tracing's <code>info!</code> macro</p>
 <p><code>info!("Hello Log")</code></p>
-<p>Now lets run</p>
+<p>Now let's run</p>
 <pre><code>
      Running `target/debug/test_spiral`
 2024-10-19T22:08:28.501325Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -384,18 +383,18 @@ We can print a warn message using Tracings supplied macros</p>
 2024-10-19T22:08:28.518035Z  WARN wgpu_hal::gles::egl: No config found!    
 2024-10-19T22:08:28.518049Z  WARN wgpu_hal::gles::egl: EGL says it can present to the window but not natively  
 </code></pre>
-<p>Perhaps unsurprisingly The message did not appear as it is higher level then warning.
-Therefore our settings have declared this too verbose.</p>
+<p>Perhaps unsurprisingly, The message did not appear as it is at a higher level than <code>warning</code>.
+Therefore, our settings have declared this to be too verbose.</p>
 <h3 id="higher-level-logging-for-our-application"><a class="header" href="#higher-level-logging-for-our-application">Higher level logging for our application</a></h3>
-<p>First lets add the depenencies</p>
+<p>First, let's add the depenencies</p>
 <p><code>cargo add tracing</code></p>
 <p><code>cargo add tracing-subscriber</code></p>
-<p>In order to show our applications logging we need to change the env filter to show our applications at <code>info</code> level or above.</p>
+<p>In order to show our applications logging, we need to change the env filter to show our applications at the <code>info</code> level or above.</p>
 <p>The syntax introduced will be to change targets</p>
 <p><code>cratename::modulename</code></p>
 <p>I called my example crate test_spiral</p>
-<p>So the target we supply to the env filter will be <code>test_spiral</code> there is no module name, therfore it is left blank.</p>
-<p>Env filters are comma seperated so <code>warn,test_spiral=info</code> will mean "run <code>warn</code> level for as normal, for module test_spiral <code>info</code>"</p>
+<p>So, the target we supply to the env filter will be <code>test_spiral</code>. Since there is no module name, it is left blank.</p>
+<p>Env filters are comma separated so <code>warn,test_spiral=info</code> will mean "run <code>warn</code> level for as normal, for module test_spiral <code>info</code>"</p>
 <pre><code class="language-rust">fn main() {
     App::new()
         //Disable the defaults
@@ -407,7 +406,7 @@ Therefore our settings have declared this too verbose.</p>
         .add_systems(Startup, setup)
         .run();
 }</code></pre>
-<p>Lets run</p>
+<p>Let's run</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:12:21.298476Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
 2024-10-19T22:12:21.307716Z  WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
@@ -419,7 +418,7 @@ Therefore our settings have declared this too verbose.</p>
 </code></pre>
 <p>Excellent</p>
 <h3 id="module"><a class="header" href="#module">Module</a></h3>
-<p>We are going to make a second module we will keep it in the same file for simplicity but it will work for seperate files</p>
+<p>We are going to make a second module we will keep it in the same file for simplicity but it will work for separate files</p>
 <pre><code class="language-rust">use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
 use tracing::Level;
@@ -504,8 +503,8 @@ mod spammy {
         }
     }
 }</code></pre>
-<p><code>?i</code> just means use debug of that variable to print, otherwise you can use the macros same way as <code>println!</code>
-lets first change the log level for our application to be at <code>trace</code></p>
+<p><code>?i</code> just means use debug of that variable to print. Otherwise you can use the macros the same way as <code>println!</code></p>
+<p>Let's first change the log level for our application to be at <code>trace</code></p>
 <pre><code class="language-rust">filter: "warn,test_spiral=trace".to_string(),</code></pre>
 <p>now run</p>
 <pre><code>     Running `target/debug/test_spiral`
@@ -528,12 +527,12 @@ lets first change the log level for our application to be at <code>trace</code><
 2024-10-19T22:24:06.016247Z TRACE test_spiral::spammy: i=8
 2024-10-19T22:24:06.016251Z TRACE test_spiral::spammy: i=9
 </code></pre>
-<p>In this case you can see the print_trash module ran before my setup code.
-also note that the crate module path was printed <code>test_spiral::spammy</code> this will soon be relevant</p>
+<p>In this case, you can see that the <code>print_trash</code> module ran before my setup code.
+Also note that the crate module path was printed <code>test_spiral::spammy</code>. This will soon be relevant</p>
 <h4 id="filter-out-by-module"><a class="header" href="#filter-out-by-module">Filter out by module</a></h4>
-<p>Clearly we have a problem with spammy, we could just delete the spammy logs like we would have to do with techniques in the previous chapter.
-However for the sake of the excercies lets pretend that we sometimes is useful</p>
-<p>Lets put in a log code so we cannot just change the applications logging levels</p>
+<p>Clearly we have a problem with spammy. We could just delete the spammy logs like we would have to do with techniques in the previous chapter.
+However, for the sake of the excercie, let's pretend that we sometimes is useful.</p>
+<p>Let's put in a log code so we cannot just change the application's logging levels</p>
 <pre><code class="language-rust">fn setup(
     mut commands: Commands,
     mut meshes: ResMut&lt;Assets&lt;Mesh&gt;&gt;,
@@ -555,9 +554,9 @@ However for the sake of the excercies lets pretend that we sometimes is useful</
 2024-10-19T22:32:17.218967Z  INFO test_spiral: Hello Log
 2024-10-19T22:32:17.218988Z DEBUG test_spiral: Don't hide me
 </code></pre>
-<p>If a log does not appear that I think should, I usually just put in at <code>error</code> and copy the path.</p>
+<p>If a log does not appear as I think it should, I usually just put it as an <code>error</code> and copy the path.</p>
 <p>We can now selectively hide messages when we need to! This exciting idea is what lead me to learning more about the tracing crate.</p>
-<p>But what about showing line numbers and extra details, this will be covered in the next chapter</p>
+<p>But what about showing line numbers and extra details? This will be covered in the next chapter.</p>
 
                     </main>
 

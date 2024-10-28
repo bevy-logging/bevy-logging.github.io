@@ -206,17 +206,17 @@ Or you could follow along on your own project.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="println-and-eprintln"><a class="header" href="#println-and-eprintln">Println! and eprintln</a></h1>
 <h2 id="println"><a class="header" href="#println">Println!</a></h2>
 <p>The first tool which you may reach for when you experience unexpected behaviour is <code>println!</code>.
-<code>println!</code> can be used as the name suggests to print values at key points of your program where your issue might lie.</p>
+<code>println!</code> can be used, as the name suggests, to print values at key points of your program where your issue might lie.</p>
 <p>However</p>
 <ul>
 <li>Typing, or more likely copying and pasting <code>println!</code>'s everywhere gets quite tedious.</li>
-<li>Each <code>println!</code> should in most cases have some marking string that lets you know which one triggered,otherwise you have to do additional searching.</li>
-<li>At some point these <code>println!</code>'s need to removed or they will block up the logging.</li>
+<li>Each <code>println!</code> should, in most cases, have some marking string that lets you know which one triggered, otherwise you have to do additional searching.</li>
+<li>At some point, these <code>println!</code>'s need to be removed, or they will block up the logging.</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="redirceting-output-to-a-file"><a class="header" href="#redirceting-output-to-a-file">Redirceting output to a file</a></h1>
-<p>You may already know <code>stdout</code> can be redirected to file using the <code>&gt;</code> operator.
-When you have lots of logging the screen can get fill quickly so redirecting can help you
-manage all that information</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="redirecting-output-to-a-file"><a class="header" href="#redirecting-output-to-a-file">Redirecting output to a file</a></h1>
+<p>You may already know <code>stdout</code> can be redirected to a file using the <code>&gt;</code> operator.
+When there is a lot of logging, the screen can fill quickly, so redirecting can help
+you manage all that information.</p>
 <p>An example below.</p>
 <p><code>Cargo run &gt; output.txt</code></p>
 <p>This gives you two major benefits</p>
@@ -225,7 +225,7 @@ manage all that information</p>
 <li>you can use a diff program <sup class="footnote-reference"><a href="#note">1</a></sup> to compare outputs for different executions</li>
 </ul>
 <div class="footnote-definition" id="note"><sup class="footnote-definition-label">1</sup>
-<p>Lots of text editors and IDE's have a built in diff editor, Alternitavely I use Delta</p>
+<p>Lots of text editors and IDE's have a built-in diff editor. Alternatively, I use Delta.</p>
 </div>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="dbg-macro"><a class="header" href="#dbg-macro">Dbg macro</a></h1>
 <p>The <code>dbg!</code> macro introduced in version <code>1.32</code> is pretty much a <code>println!</code> made for debugging.</p>
@@ -235,16 +235,16 @@ let b = dbg!(a * 2) + 1;
 //      ^-- prints: [src/main.rs:2:9] a * 2 = 4
 assert_eq!(b, 5);</code></pre>
 <p>Notice that the file path and line numbers are printed.
-This metadata is generated at compile time so will keep up with changes made in your program.</p>
-<p>This means it less essential to make your <code>dbg</code> statements unique.</p>
-<p>However there are still some disadvantages (same as <code>println!</code>)</p>
+This metadata is generated at compile time, so it will keep up with changes made in your program.</p>
+<p>This means it is less essential to make your <code>dbg</code> statements unique.</p>
+<p>However, there are still some disadvantages (same as <code>println!</code>)</p>
 <ul>
 <li>Typing or more likely copying and pasting <code>dbg!</code>'s everywhere gets quite tedious</li>
 <li>At some point these <code>dbg!</code>'s need to removed or they will block up the logging</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="the-log-plugin"><a class="header" href="#the-log-plugin">The log Plugin</a></h1>
 <p>One of Bevy's default plugins is the log plugin.</p>
-<p>Lets configure the plugin then explain as we see what happens</p>
+<p>Let's configure the plugin, then explain as we see what happens</p>
 <pre><code class="language-rust">fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(LogPlugin {
@@ -256,8 +256,7 @@ This metadata is generated at compile time so will keep up with changes made in 
         .run();
 }
 
-</code></pre>
-<p>The rest of the code of an example application.</p>
+// The rest of the code...</code></pre>
 <p>Code can also be found <a href="https://github.com/bevy-logging/test_spiral">here.</a></p>
 <pre><code class="language-rust">use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
@@ -356,11 +355,11 @@ fn setup(
 2024-10-19T21:46:13.389895Z TRACE wgpu_core::resource: Destroy raw Buffer (dropped) "Mesh Index Buffer"  
 
 </code></pre>
-<p>The console is absolutly flooded with debug messages from the bevy engine itself along with its dependencies.
-Libraries use a similar logging scheme to what is about to be shown below the idea is that you can filter out the irrelevant logs.
-In order to start filtering we need to learn about levels and the Env filter.</p>
+<p>The console is absolutely flooded with debug messages from the Bevy engine itself, along with its dependencies.
+Libraries use a similar logging scheme to what is about to be shown below. The idea is that you can filter out the irrelevant logs.
+In order to start filtering, we need to learn about levels and the Env filter.</p>
 <h2 id="log-levels"><a class="header" href="#log-levels">Log Levels</a></h2>
-<p>Tracing (Which the default Log plugin used for most Bevy Supported platforms with the major exceptions of the web and mobile) has the below log levels from highest (most detailed) to lowest (most important)</p>
+<p>Tracing (The default Log plugin used for most Bevy Supported platforms with the major exceptions of the web and mobile) has the below log levels from highest (most detailed) to lowest (most important)</p>
 <ul>
 <li><code>Trace</code> (Not printed by default)</li>
 <li><code>Debug</code> (Not printed by default)</li>
@@ -369,17 +368,17 @@ In order to start filtering we need to learn about levels and the Env filter.</p
 <li><code>Error</code></li>
 <li><code>None</code> (you turned off logging)</li>
 </ul>
-<p>Its up to you what these mean exactly but here is how I use them in Bevy.</p>
+<p>It's up to you what these mean exactly, but here is how I use them in Bevy.</p>
 <ul>
 <li><code>Trace</code> details inside a loop</li>
 <li><code>Debug</code> start or end of loops</li>
-<li><code>Info</code> usually what I am working on currently I then set to either debug or trace. I also use this for information
+<li><code>Info</code> usually what I am working on currently, I then set it to either debug or trace. I also use this for information
 I want to display but haven't built the UI for yet</li>
 <li><code>Warn</code> I never use</li>
 <li><code>Error</code> let else fail when I don't expect it to</li>
 </ul>
-<p>Lower levels are more important, higher levels (by convention not enforcement!) are more verbose.</p>
-<p>For example at the default level <code>Info</code> the levels below <code>Warn</code> and <code>Error</code> will also print.</p>
+<p>Lower levels are more important, while higher levels (by convention, not enforcement!) are more verbose.</p>
+<p>For example, at the default level <code>Info</code> the levels below <code>Warn</code> and <code>Error</code> will also print.</p>
 <p>Extract from the Tracing library</p>
 <pre><code class="language-rust">use tracing_core::Level;
 
@@ -391,7 +390,7 @@ assert_eq!(Level::TRACE, Level::TRACE);</code></pre>
 <p>An env filter is used to put specific filters per target, span and fields. For now just equate targets with modules.</p>
 <p>Spans will be discussed later.</p>
 <p>I have not needed fields, until I use them or someone else supplies an example fields are an excercise for the reader.</p>
-<p>To start with lets put a global env filter set all to warn, this can give you useful messages such as a uinode without an appopriate parent node</p>
+<p>To start with let's put a global env filter set all to warn, this can give you useful messages such as a UI-node without an appropriate parent node</p>
 <pre><code class="language-rust">fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(LogPlugin {
@@ -412,11 +411,11 @@ assert_eq!(Level::TRACE, Level::TRACE);</code></pre>
 2024-10-19T22:03:13.952167Z  WARN wgpu_hal::gles::egl: EGL says it can present to the window but not natively    
 </code></pre>
 <h3 id="the-level-field"><a class="header" href="#the-level-field">The level field</a></h3>
-<p>The level field in the log plugin is a quick way to globally set all logs.
+<p>The level field in the log plugin is a quick way to set all logs globally.
 A major use case is having release and debug modes with different log levels.</p>
 <h3 id="adding-our-own-logging"><a class="header" href="#adding-our-own-logging">Adding our own logging</a></h3>
-<p>Ok so lets add in our own startup warning message, warning because only they and errors will show.
-We can print a warn message using Tracings supplied macros</p>
+<p>Ok, so let's add in our own startup warning message, warning because only they and errors will show.
+We can print a <code>Warn</code> message using Tracing's supplied macros</p>
 <pre><code class="language-rust">fn setup(
     mut commands: Commands,
     mut meshes: ResMut&lt;Assets&lt;Mesh&gt;&gt;,
@@ -440,10 +439,10 @@ We can print a warn message using Tracings supplied macros</p>
 2024-10-19T22:06:52.007886Z  WARN test_spiral: Hello Log
 
 </code></pre>
-<p>Great we can put a message there, but its not really a warning we can move it to the info level.</p>
+<p>Great. We can put a message there, but it's not really a warning, so we can move it to the info level.</p>
 <p>We use Tracing's <code>info!</code> macro</p>
 <p><code>info!("Hello Log")</code></p>
-<p>Now lets run</p>
+<p>Now let's run</p>
 <pre><code>
      Running `target/debug/test_spiral`
 2024-10-19T22:08:28.501325Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
@@ -453,18 +452,18 @@ We can print a warn message using Tracings supplied macros</p>
 2024-10-19T22:08:28.518035Z  WARN wgpu_hal::gles::egl: No config found!    
 2024-10-19T22:08:28.518049Z  WARN wgpu_hal::gles::egl: EGL says it can present to the window but not natively  
 </code></pre>
-<p>Perhaps unsurprisingly The message did not appear as it is higher level then warning.
-Therefore our settings have declared this too verbose.</p>
+<p>Perhaps unsurprisingly, The message did not appear as it is at a higher level than <code>warning</code>.
+Therefore, our settings have declared this to be too verbose.</p>
 <h3 id="higher-level-logging-for-our-application"><a class="header" href="#higher-level-logging-for-our-application">Higher level logging for our application</a></h3>
-<p>First lets add the depenencies</p>
+<p>First, let's add the depenencies</p>
 <p><code>cargo add tracing</code></p>
 <p><code>cargo add tracing-subscriber</code></p>
-<p>In order to show our applications logging we need to change the env filter to show our applications at <code>info</code> level or above.</p>
+<p>In order to show our applications logging, we need to change the env filter to show our applications at the <code>info</code> level or above.</p>
 <p>The syntax introduced will be to change targets</p>
 <p><code>cratename::modulename</code></p>
 <p>I called my example crate test_spiral</p>
-<p>So the target we supply to the env filter will be <code>test_spiral</code> there is no module name, therfore it is left blank.</p>
-<p>Env filters are comma seperated so <code>warn,test_spiral=info</code> will mean "run <code>warn</code> level for as normal, for module test_spiral <code>info</code>"</p>
+<p>So, the target we supply to the env filter will be <code>test_spiral</code>. Since there is no module name, it is left blank.</p>
+<p>Env filters are comma separated so <code>warn,test_spiral=info</code> will mean "run <code>warn</code> level for as normal, for module test_spiral <code>info</code>"</p>
 <pre><code class="language-rust">fn main() {
     App::new()
         //Disable the defaults
@@ -476,7 +475,7 @@ Therefore our settings have declared this too verbose.</p>
         .add_systems(Startup, setup)
         .run();
 }</code></pre>
-<p>Lets run</p>
+<p>Let's run</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:12:21.298476Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
 2024-10-19T22:12:21.307716Z  WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
@@ -488,7 +487,7 @@ Therefore our settings have declared this too verbose.</p>
 </code></pre>
 <p>Excellent</p>
 <h3 id="module"><a class="header" href="#module">Module</a></h3>
-<p>We are going to make a second module we will keep it in the same file for simplicity but it will work for seperate files</p>
+<p>We are going to make a second module we will keep it in the same file for simplicity but it will work for separate files</p>
 <pre><code class="language-rust">use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
 use tracing::Level;
@@ -573,8 +572,8 @@ mod spammy {
         }
     }
 }</code></pre>
-<p><code>?i</code> just means use debug of that variable to print, otherwise you can use the macros same way as <code>println!</code>
-lets first change the log level for our application to be at <code>trace</code></p>
+<p><code>?i</code> just means use debug of that variable to print. Otherwise you can use the macros the same way as <code>println!</code></p>
+<p>Let's first change the log level for our application to be at <code>trace</code></p>
 <pre><code class="language-rust">filter: "warn,test_spiral=trace".to_string(),</code></pre>
 <p>now run</p>
 <pre><code>     Running `target/debug/test_spiral`
@@ -597,12 +596,12 @@ lets first change the log level for our application to be at <code>trace</code><
 2024-10-19T22:24:06.016247Z TRACE test_spiral::spammy: i=8
 2024-10-19T22:24:06.016251Z TRACE test_spiral::spammy: i=9
 </code></pre>
-<p>In this case you can see the print_trash module ran before my setup code.
-also note that the crate module path was printed <code>test_spiral::spammy</code> this will soon be relevant</p>
+<p>In this case, you can see that the <code>print_trash</code> module ran before my setup code.
+Also note that the crate module path was printed <code>test_spiral::spammy</code>. This will soon be relevant</p>
 <h4 id="filter-out-by-module"><a class="header" href="#filter-out-by-module">Filter out by module</a></h4>
-<p>Clearly we have a problem with spammy, we could just delete the spammy logs like we would have to do with techniques in the previous chapter.
-However for the sake of the excercies lets pretend that we sometimes is useful</p>
-<p>Lets put in a log code so we cannot just change the applications logging levels</p>
+<p>Clearly we have a problem with spammy. We could just delete the spammy logs like we would have to do with techniques in the previous chapter.
+However, for the sake of the excercie, let's pretend that we sometimes is useful.</p>
+<p>Let's put in a log code so we cannot just change the application's logging levels</p>
 <pre><code class="language-rust">fn setup(
     mut commands: Commands,
     mut meshes: ResMut&lt;Assets&lt;Mesh&gt;&gt;,
@@ -624,21 +623,21 @@ However for the sake of the excercies lets pretend that we sometimes is useful</
 2024-10-19T22:32:17.218967Z  INFO test_spiral: Hello Log
 2024-10-19T22:32:17.218988Z DEBUG test_spiral: Don't hide me
 </code></pre>
-<p>If a log does not appear that I think should, I usually just put in at <code>error</code> and copy the path.</p>
+<p>If a log does not appear as I think it should, I usually just put it as an <code>error</code> and copy the path.</p>
 <p>We can now selectively hide messages when we need to! This exciting idea is what lead me to learning more about the tracing crate.</p>
-<p>But what about showing line numbers and extra details, this will be covered in the next chapter</p>
+<p>But what about showing line numbers and extra details? This will be covered in the next chapter.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="introduction-to-tracing"><a class="header" href="#introduction-to-tracing">Introduction to Tracing</a></h1>
 <h2 id="about-tracing"><a class="header" href="#about-tracing">About Tracing</a></h2>
 <p><a href="https://crates.io/crates/tracing">Tracing</a>  <code>tracing</code> is a framework for instrumenting Rust programs to collect structured, event-based diagnostic information."</p>
 <p>Tracing is made for and often talked about in regards to asynchronous code, which is where a lot of documentation and discussion is addresses.</p>
-<p>However you don't need to use async code to benefit from this crate, I expect I will use this crate for every non-trival program I write in rust!</p>
+<p>However, you don't need to use async code to benefit from this crate. I expect I will use this crate for every non-trivial program I write in Rust!</p>
 <h2 id="why-use-tracing"><a class="header" href="#why-use-tracing">Why use Tracing</a></h2>
 <ul>
 <li>Instead of deleting logs that you are not actively using, you can stop sending those logs until they are needed.</li>
 <li>You can log to multiple files by category</li>
 </ul>
-<h2 id="next-steps-from-what-we-have-learnt"><a class="header" href="#next-steps-from-what-we-have-learnt">Next Steps from what we have learnt</a></h2>
-<p>So far we have learned about logging levels and filtering by module our next goal is to learn how to add more context to our logs.</p>
+<h2 id="next-steps-from-what-we-have-learned"><a class="header" href="#next-steps-from-what-we-have-learned">Next Steps from what we have learned</a></h2>
+<p>So far, we have learned about logging levels and filtering by module. Our next goal is to learn how to add more context to our logs.</p>
 <h3 id="instrument"><a class="header" href="#instrument">instrument</a></h3>
 <p><code>instrument</code> adds more context to your functions</p>
 <pre><code class="language-rust">
@@ -741,7 +740,7 @@ mod spammy {
             info!("Fizz");
         }
     }</code></pre>
-<p>Lets run</p>
+<p>Let's run</p>
 <pre><code>     Running `target/debug/test_spiral`
 2024-10-19T22:42:47.680435Z  WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation    
 2024-10-19T22:42:47.690495Z  WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
@@ -754,10 +753,10 @@ mod spammy {
 2024-10-19T22:42:48.169448Z  INFO some_function{i=3}: test_spiral::spammy: Fizz
 </code></pre>
 <p>Notice that <code>some_function</code> is now printing along with its argument some more context.</p>
-<p>We can skip the arguments using skip_all which can be useful if some arguments don't have debug.</p>
+<p>We can skip the arguments using <code>skip_all</code>, which can be useful if some arguments don't implement <code>Debug</code>.</p>
 <p><code>#[instrument(skip_all)]</code></p>
-<p>I tend to use skip_all for all my systems as queries can be quite spammy.
-If create a system to query all transforms</p>
+<p>I tend to use <code>skip_all</code> for all my systems as queries can be quite spammy.
+If I, for example, create a system to query all transforms</p>
 <p><code>.add_systems(Update, some_queries.run_if(run_once()))</code></p>
 <pre><code class="language-rust">#[instrument]
 fn some_queries(transformers: Query&lt;&amp;Transform&gt;) {
@@ -781,7 +780,7 @@ world: World { id: WorldId(0), entity_count: 10003, archetype_count: 8, componen
 test_spiral: not actually going to run
 </code></pre>
 <p>Note I added the line breaks to fit the margins</p>
-<p>So lets add skip all
+<p>So let's add <code>skip_all</code><br />
 <code>#[instrument(skip_all)]</code></p>
 <p>The output</p>
 <pre><code>     Running `target/debug/test_spiral`
@@ -796,9 +795,9 @@ test_spiral: not actually going to run
 2024-10-21T08:12:12.345155Z  INFO some_function{i=3}: test_spiral::spammy: Fizz
 2024-10-21T08:12:13.653510Z  INFO some_queries: test_spiral: not actually going to run
 </code></pre>
-<p>If you recall an earlier section of the book say equate targets with modules <em>for now</em></p>
-<p>You can change that using arguments to instruments, this will not be demonstrated however,
-As I have never had a need for it yet.</p>
+<p>If you recall, an earlier section of the book says to equate targets with modules <em>for now</em>.</p>
+<p>You can change that using arguments to instruments. This will not be demonstrated, however,
+as I have never had a need for it yet.</p>
 <p>More about instruments <a href="https://docs.rs/tracing/latest/tracing/attr.instrument.html">here</a></p>
 <h3 id="spans"><a class="header" href="#spans">Spans</a></h3>
 <p>I think of spans as tags, I don't have a lot of experience with them so this will be brief and incomplete.</p>
@@ -810,22 +809,22 @@ As I have never had a need for it yet.</p>
 <li>Related ui or input handling</li>
 </ul>
 <p>You can use as many spans as you want.</p>
-<p>Now lets look at the syntax to use a span inside a fuction
-you need code that looks like this</p>
+<p>Now lets look at the syntax to use a span inside a fuction.
+You need code that looks like this</p>
 <pre><code class="language-rust">let span = span!(Level::DEBUG, "start");
 let _guard = span.enter();</code></pre>
 <p>Spans only apply when the logging level is set at it or above.</p>
 <p>Note <code>_guard</code> is there to stop the variable being dropped immediately.
 The underscore is to stop unused errors as its drop behaviour is what really makes it work!</p>
 <p>While <code>_guard</code> is valid(undropped) the span is entered.
-while span is valid the span is created</p>
-<p>There is shorthands for all logging levels such as <code>trace_span!</code></p>
+While <code>span</code> is valid the span is created.</p>
+<p>There are shorthands for all logging levels, such as <code>trace_span!</code></p>
 <p>You cannot combine the <code>span(/* snip*/).enter</code>  into one line as <em>entering</em> a span and <em>creating</em>
-are distinct things, A span is only <em>created</em> once while a span can be <em>entered</em> many times.</p>
+are distinct things. A span is only <em>created</em> once while a span can be <em>entered</em> many times.</p>
 <p>Entering and exiting spans is <del>stuff I don't have much idea about</del> beyond the scope this tutorial(mostly async stuff).</p>
 <p>Spans <em>exit</em> when the variable holding the enter is dropped in this example the <code>_guard</code>
-Spans <em>Close</em> when the span variable is dropped.</p>
-<p>we can use square brackets to filter by span</p>
+spans <em>close</em> when the span variable is dropped.</p>
+<p>We can use square brackets to filter by span</p>
 <p><code>filter: "warn,test_spiral=trace,test_spiral::spammy=info,test_spiral[start]=trace"</code></p>
 <p>Now for the entire code</p>
 <pre><code class="language-rust">use bevy::{log::LogPlugin, prelude::*};
@@ -963,9 +962,9 @@ mod spammy {
 2024-10-19T23:11:18.441500Z  INFO some_queries: test_spiral: not actually going to run
 </code></pre>
 <h2 id="using-tracing-on-its-own"><a class="header" href="#using-tracing-on-its-own">Using Tracing on its own</a></h2>
-<p>For the sake of learning we will disable the default plugin and use Tracing itself.
-This also means you can use Tracing on other applications using what you have learnt here.
-Tracing uses a subscriber made up of layers I don't really understand the details</p>
+<p>For the sake of learning we will disable the default plugin and use the <code>tracing</code> crate itself.
+This also means you can use what you learned here on other applications using <code>tracing</code>.
+Tracing uses a subscriber made up of layers (I don't really understand the details)</p>
 <pre><code class="language-rust">use bevy::{log::LogPlugin, prelude::*};
 use rand::prelude::*;
 use tracing::{instrument, span, Level};
@@ -981,7 +980,7 @@ fn main() {
         .add_systems(Update, some_queries.run_if(run_once()))
         .run();
 }</code></pre>
-<p>Lets modify Tracing</p>
+<p>Let's modify Tracing</p>
 <pre><code class="language-rust">tracing_subscriber::fmt()
   .without_time()
   .with_file(true)
@@ -1006,7 +1005,7 @@ fn main() {
 <p>Pretty is useful for console, remove if you are redirecting to a txt file</p>
 </li>
 </ul>
-<p>Now lets run</p>
+<p>Now, let's run</p>
 <pre><code>     Running `target/debug/test_spiral`
    WARN wgpu_hal::vulkan::instance: InstanceFlags::VALIDATION requested, but unable to find layer: VK_LAYER_KHRONOS_validation
     at /home/lyndonm/.cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-hal-0.21.1/src/vulkan/instance.rs:724
@@ -1088,14 +1087,14 @@ fn main() {
     in test_spiral::some_queries
 </code></pre>
 <p>Line numbers and file names. You may be happy to just work on your game from this point.
-Next chapters is basically breaking Tracing up into layers so you can have multiple specialiesd files</p>
+Next chapters is basically breaking Tracing up into layers so you can have multiple specialized files.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="tracing-multiple-files"><a class="header" href="#tracing-multiple-files">Tracing multiple files</a></h1>
-<p>Using our powers of span we can "Tag" our logs to go to seperate files per span, first we need to learn about layers.</p>
+<p>Using our powers of span, we can "Tag" our logs to go to separate files per span. First, we need to learn about layers.</p>
 <h2 id="subscribers"><a class="header" href="#subscribers">Subscribers</a></h2>
-<p>Subscribers carry many layers, I am not entirely sure about the definition of a subscriber but I believe its basically
-a consumer of tracing logs that decides how to output it. I have only used the one on the tracing crate but their are other
-variations such as tree logging.</p>
-<p>lets read the documentation
+<p>Subscribers carry many layers. I am not entirely sure about the definition of a subscriber, but I believe it's basically
+a consumer of tracing logs that decides how to output them. I have only used the one on the tracing crate,
+but there are other variations, such as tree logging.</p>
+<p>Let's read the documentation
 "A subscriber is responsible for the following:</p>
 <pre><code>Registering new spans as they are created, and providing them with span IDs. Implicitly, this means the subscriber may determine the strategy for determining span equality.
 Recording the attachment of field values and follows-from annotations to spans.
