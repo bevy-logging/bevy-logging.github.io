@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intoduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> Println </a></li><li class="chapter-item expanded "><a href="chapter_2.html"><strong aria-hidden="true">2.</strong> Redirecting output to a file</a></li><li class="chapter-item expanded "><a href="chapter_3.html"><strong aria-hidden="true">3.</strong> Dbg</a></li><li class="chapter-item expanded "><a href="chapter_4.html"><strong aria-hidden="true">4.</strong> The log plugin</a></li><li class="chapter-item expanded "><a href="chapter_5.html"><strong aria-hidden="true">5.</strong> Introduction to Tracing</a></li><li class="chapter-item expanded "><a href="chapter_6.html"><strong aria-hidden="true">6.</strong> Tracing Multiple outputs</a></li><li class="chapter-item expanded "><a href="chapter_7.html"><strong aria-hidden="true">7.</strong> Putting Layers into default plugin</a></li><li class="chapter-item expanded "><a href="future.html"><strong aria-hidden="true">8.</strong> Other features I have thought of using</a></li><li class="chapter-item expanded "><a href="chapter_8.html"><strong aria-hidden="true">9.</strong> Further Info</a></li><li class="chapter-item expanded "><a href="patterns.html"><strong aria-hidden="true">10.</strong> Design patterns</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">11.</strong> Contributing</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intoduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> Println </a></li><li class="chapter-item expanded "><a href="chapter_2.html"><strong aria-hidden="true">2.</strong> Redirecting output to a file</a></li><li class="chapter-item expanded "><a href="chapter_3.html"><strong aria-hidden="true">3.</strong> Dbg</a></li><li class="chapter-item expanded "><a href="chapter_4.html"><strong aria-hidden="true">4.</strong> The log plugin</a></li><li class="chapter-item expanded "><a href="chapter_5.html"><strong aria-hidden="true">5.</strong> Introduction to Tracing</a></li><li class="chapter-item expanded "><a href="chapter_6.html"><strong aria-hidden="true">6.</strong> Tracing Multiple outputs</a></li><li class="chapter-item expanded "><a href="chapter_7.html"><strong aria-hidden="true">7.</strong> Putting Layers into default plugin</a></li><li class="chapter-item expanded "><a href="future.html"><strong aria-hidden="true">8.</strong> Other features I have thought of using</a></li><li class="chapter-item expanded "><a href="chapter_8.html"><strong aria-hidden="true">9.</strong> Further Info</a></li><li class="chapter-item expanded "><a href="patterns.html"><strong aria-hidden="true">10.</strong> Design patterns</a></li><li class="chapter-item expanded "><a href="subscribers.html"><strong aria-hidden="true">11.</strong> Other Subscribers</a></li><li class="chapter-item expanded "><a href="performance.html"><strong aria-hidden="true">12.</strong> Performance</a></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">13.</strong> Contributing</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -203,6 +203,10 @@ however I have found this is not as much the case with Bevy.</p>
 <p>Please note this document is not an official document of bevy's</p>
 <p>Referenced code can be found <a href="https://github.com/bevy-logging/test_spiral">here</a>
 Or you could follow along on your own project.</p>
+<h3 id="completion-state"><a class="header" href="#completion-state">Completion state</a></h3>
+<p>This book is in a state of generally good enough for my game development.
+I prefer to stay on track with my game rather then add to this book,
+therefore unless others contribute, updates will appear as they are useful to me.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="println-and-eprintln"><a class="header" href="#println-and-eprintln">Println! and eprintln</a></h1>
 <h2 id="println"><a class="header" href="#println">Println!</a></h2>
 <p>The first tool which you may reach for when you experience unexpected behaviour is <code>println!</code>.
@@ -1285,6 +1289,28 @@ multiple issues in one run.</p>
 2024-10-20T23:53:23.645988Z  INFO test_spiral: found the light
 </code></pre>
 <p>Prefer to use <code>continue</code> over return in loops otherwise one bad apple will destroy bunch</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="other-subscribers"><a class="header" href="#other-subscribers">Other Subscribers</a></h1>
+<p>So far all that has been presented is the fmt subscriber for text output but Tracing can do more then that.
+Note I haven't needed to use multiple subscribers, so far I just change globabl subscriber and leave it at that.</p>
+<h2 id="bunyan-subscriber"><a class="header" href="#bunyan-subscriber">Bunyan Subscriber</a></h2>
+<p>I don't know what bunyan formatter is just someone thought it was mentioning, who am I to disagree?
+<a href="https://crates.io/crates/tracing-bunyan-formatter">bunyan</a></p>
+<h2 id="gizmo-subscriber"><a class="header" href="#gizmo-subscriber">Gizmo Subscriber</a></h2>
+<p>Use to draw gizmos quickly, I have not yet used but I am likely to in future.
+<a href="https://docs.rs/crate/bevy_gizmo_log/latest">Gizmo subscriber</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="performance"><a class="header" href="#performance">Performance</a></h1>
+<h2 id="disclaimer"><a class="header" href="#disclaimer">Disclaimer</a></h2>
+<p>I have not empirically measured any performance at all, so this is all a matter of if very obvious impacts.
+If I do measure it later I will update it.</p>
+<h2 id="logging-statements-runtime-ignored"><a class="header" href="#logging-statements-runtime-ignored">Logging statements runtime ignored</a></h2>
+<p>I have not experienced any issues with just having lots of logging that is ignored at runtime.
+It is possible to set levels at compile time, I haven't yet got around to doing it (that is why there is no instructions yet).
+Tracing from what was said in Jon Gjensets video goes to great pains to minimise performance costs.</p>
+<h2 id="logging-multiple-files"><a class="header" href="#logging-multiple-files">Logging multiple files.</a></h2>
+<p>Previous chapters discussed how its possible to have files throughly recording everything you can possibly care about;
+However I noticed massive performance gains just by commenting out the layers that print to the file.</p>
+<h3 id="mitigating-the-perfomance-issues"><a class="header" href="#mitigating-the-perfomance-issues">Mitigating the perfomance issues.</a></h3>
+<p>TODO: Test if I can somehow make an IO logging thread in bevy work with tracing.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="contributing"><a class="header" href="#contributing">Contributing</a></h1>
 <p>I welcome all contributions to the book whether it is via a pull request or raising an issue.</p>
 <p><a href="https://github.com/bevy-logging/bevy_logging">Github</a></p>
